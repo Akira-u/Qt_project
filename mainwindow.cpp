@@ -48,6 +48,5 @@ void MainWindow::checkObjsMove(){
     if(mario->isHorizontalMove() != STOP){
         mario->moveBy(mario->isHorizontalMove() * mario->getSpeed(), 0);
     }
-    qDebug("sdfasdfasdf");
     //to do: add check of monsters
 }

@@ -18,11 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     hero.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    trap.cpp
 
 HEADERS += \
+    constants.h \
     hero.h \
-    mainwindow.h
+    mainwindow.h \
+    trap.h
 
 FORMS += \
     mainwindow.ui

@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "constants.h"
 #include "hero.h"
 #include <QTimer>
 #include <QWidget>
@@ -10,7 +11,7 @@
 #include <QGraphicsItem>
 #include <QKeyEvent>
 
-const int TIMER_INTERVAL=20;
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
