@@ -1,0 +1,2 @@
+C:\Users\86135\Documents\GitHub\Qt_project\debug\Mario.exe
+C:\Users\86135\Documents\GitHub\Qt_project\debug\Mario.pdb
