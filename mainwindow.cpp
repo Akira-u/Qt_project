@@ -9,44 +9,62 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     QGraphicsScene *scene = new QGraphicsScene(this);//background scene
-    scene->setBackgroundBrush(QBrush(Qt::gray));//to do: add bkground
-    mario=new Hero(QPixmap(":/png/mario_stop.png"),this);
+    scene->setSceneRect(0, 0, 1000, 600);
+    QPixmap backgroundImg(":/pics/background.png");
+    backgroundImg.scaled(1000,600);
+    scene->setBackgroundBrush(QBrush(backgroundImg));
+
+    mario=new Hero(QPixmap(":/pics/mario_stop.png"),this);
+    block=new Block(50,300,QPixmap(":/pics/brick.png"), this);
+    scene->addItem(block);
     scene->addItem(mario);
+    mario->setPos(100,239);// init start location 无限地图下改位置也看不出来
+
+    mario->grabKeyboard();// ensure keyboard event not be thrown
     ui->backgroundView->setScene(scene);
 
     QTimer *globalTimer = new QTimer(this);
     globalTimer->setInterval(TIMER_INTERVAL);//可以调整间隔改变平滑度
     globalTimer->start();
-    connect(globalTimer, SIGNAL(timeout()), this, SLOT(checkObjsMove()));
-    connect(globalTimer, SIGNAL(timeout()), this, SLOT(update()));
+
+    connect(globalTimer, SIGNAL(timeout()), this, SLOT(allUpdate()));
 }
 
 MainWindow::~MainWindow(){
     delete ui;
+    delete mario;
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event){
-    if(event->key() == Qt::Key_D){// hero move right
-        mario->setHorizontalMove(RIGHT);
+
+void MainWindow::checkObjsMove(){
+    if(mario->isHorizontalMove() != STOP){
+        mario->moveBy(mario->isHorizontalMove() * mario->getHorizontalSpeed(), 0);
     }
-    else if(event->key() == Qt::Key_A){// hero move left
-        mario->setHorizontalMove(LEFT);
+    // left out = right in
+    if(mario->pos().x()<0){
+        mario->setX(999);
     }
-    else{
-        QMainWindow::keyPressEvent(event);
+    else if(mario->pos().x()>1000){
+        mario->setX(1);
     }
+    //to do: add check of monsters
+    //todo：不能跳出去
 }
-void MainWindow::keyReleaseEvent(QKeyEvent *event){
-    if(event->key() == Qt::Key_D||event->key() == Qt::Key_A){// stop move
+void MainWindow::checkObjsCollide(){
+    mario->collideItemsList=mario->collidingItems();
+    if(!mario->collideItemsList.isEmpty()){
+        //qDebug("crash!");
         mario->setHorizontalMove(STOP);
     }
     else{
-        QMainWindow::keyReleaseEvent(event);
+        //todo：判断是否踩在地上
     }
 }
-void MainWindow::checkObjsMove(){
-    if(mario->isHorizontalMove() != STOP){
-        mario->moveBy(mario->isHorizontalMove() * mario->getSpeed(), 0);
-    }
-    //to do: add check of monsters
+
+void MainWindow::allUpdate(){// check all things needed to be check periodically
+
+    checkObjsMove();
+    checkObjsCollide();
+    update();
+
 }

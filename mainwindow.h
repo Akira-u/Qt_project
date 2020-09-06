@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include "constants.h"
+#include "unit.h"
 #include "hero.h"
+#include "block.h"
 #include <QTimer>
 #include <QWidget>
 #include <QMainWindow>
@@ -17,6 +19,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -24,16 +27,17 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    void checkObjsMove();
+    void checkObjsCollide();
+    int currentGameStatus = PLAYMODE;
 
 public slots:
-    void checkObjsMove();
+    void allUpdate();
 
 private:
     Ui::MainWindow *ui;
-    //to do: set current status(editing/gaming/results...)
     Hero *mario;// the pointer of unique hero
     //to do: write class Monster inheriting Item and add list of monsters
+    Block *block;
 };
 #endif // MAINWINDOW_H
