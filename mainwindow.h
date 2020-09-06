@@ -36,6 +36,7 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+    QList<Unit*> unitsList;
     Hero *mario;// the pointer of unique hero
     //to do: write class Monster inheriting Item and add list of monsters
     Block *block;

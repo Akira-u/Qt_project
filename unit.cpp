@@ -11,7 +11,7 @@ int Unit::getHorizontalSpeed() const{
 void Unit::setHorizontalMove(int dir){
     horizontalMoveStatus = dir;
 }
-int Unit::isHorizontalMove(){
+int Unit::getHorizontalMoveStatus(){
     return horizontalMoveStatus;
 }
 QRectF Unit::boundingRect() const{
@@ -27,21 +27,37 @@ void Unit::setVerticalSpeed(int value){
     verticalSpeed = value;
 }
 
+int Unit::getVerticalMoveStatus() const
+{
+    return verticalMoveStatus;
+}
 
-bool Unit::isOnGround(){
+void Unit::setVerticalMoveStatus(int dir)
+{
+    verticalMoveStatus = dir;
+}
+
+void Unit::checkCollideDirection(){
+    collideItemsList = collidingItems();
     if(!collideItemsList.isEmpty()){
         for(auto i:collideItemsList){// find Items on the buttom of hero
-            if(i->y()<y()){
-                return true;
+            if(i->y() < y()){
+                isOnGround = true;
+            }
+            if(i->x() > x()){
+                isRightBlocked = true;
+            }
+            if(i->x() < x()){
+                isLeftBlocked = true;
+            }
+            if(i->y() > y()){
+                isFloorBlocked = true;
             }
         }
     }
-    return 0;
+
 }
 
 void Unit::jump(){
-    int v = JUMPSPEED;
-    moveBy(0, v);
-    v -= G;
-    //todo：写一个竖直运动状态
+    setVerticalSpeed(JUMPSPEED);
 }
