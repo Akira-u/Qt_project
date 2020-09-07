@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>600</height>
+    <width>2000</width>
+    <height>1200</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -35,10 +35,10 @@
    <widget class="QGraphicsView" name="backgroundView">
     <property name="geometry">
      <rect>
-      <x>-1</x>
-      <y>9</y>
-      <width>1001</width>
-      <height>571</height>
+      <x>0</x>
+      <y>0</y>
+      <width>1861</width>
+      <height>1061</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -54,7 +54,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>2000</width>
      <height>21</height>
     </rect>
    </property>

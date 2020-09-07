@@ -4,7 +4,7 @@
 #include "constants.h"
 #include "unit.h"
 #include "hero.h"
-#include "block.h"
+#include "trap.h"
 #include <QTimer>
 #include <QWidget>
 #include <QMainWindow>
@@ -33,12 +33,15 @@ public:
 
 public slots:
     void allUpdate();
+    //void gameOver();//todo implement
+signals:
+    void heroDead();
 
 private:
     Ui::MainWindow *ui;
     QList<Unit*> unitsList;
     Hero *mario;// the pointer of unique hero
     //to do: write class Monster inheriting Item and add list of monsters
-    Block *block;
+    QList<Block *>blocks;
 };
 #endif // MAINWINDOW_H

@@ -1,5 +1,5 @@
 #include "hero.h"
-
+#include<QDebug>
 Hero::Hero(QPixmap pix, QObject *parent) : Unit(pix, parent){}
 
 
@@ -7,6 +7,7 @@ Hero::Hero(QPixmap pix, QObject *parent) : Unit(pix, parent){}
 void Hero::keyPressEvent(QKeyEvent *event){
     if(event->key() == Qt::Key_D){// hero move right
         if(isRightBlocked){
+            qDebug()<<"rightBlocked"<<isRightBlocked;
             setHorizontalMove(STOP);
             return;
         }
@@ -22,6 +23,7 @@ void Hero::keyPressEvent(QKeyEvent *event){
     else if(event->key() == Qt::Key_W){
         if(isOnGround){
             jump();
+            qDebug("jump called");
             return;
         }
     }

@@ -4,5 +4,8 @@
         <file>pics/mario_stop.png</file>
         <file>pics/brick.png</file>
         <file>pics/breakable_block.png</file>
+        <file>pics/spring.png</file>
+        <file>pics/fire.png</file>
+        <file>pics/firestart.png</file>
     </qresource>
 </RCC>
