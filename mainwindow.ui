@@ -48,6 +48,254 @@
      </sizepolicy>
     </property>
    </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>1870</x>
+      <y>140</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Null</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ground</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/ground.png</normaloff>:/pics/ground.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Breakable brick</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/breakable_block.png</normaloff>:/pics/breakable_block.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Move brick</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/moveable_brick.png</normaloff>:/pics/moveable_brick.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Spring</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/spring.png</normaloff>:/pics/spring.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Passive trap</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/firestart.png</normaloff>:/pics/firestart.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Active trap</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/firestart.png</normaloff>:/pics/firestart.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Licker</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/licker.png</normaloff>:/pics/licker.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Jumper</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/jumper.png</normaloff>:/pics/jumper.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Spitter</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/spitter.png</normaloff>:/pics/spitter.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Heart</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/heart.png</normaloff>:/pics/heart.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mushroom</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/mushroom.png</normaloff>:/pics/mushroom.png</iconset>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="elementsLabel">
+    <property name="geometry">
+     <rect>
+      <x>1870</x>
+      <y>90</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>请选择要添加的元素</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>1070</y>
+      <width>171</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="map1Button_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>map1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="map2Button_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>map2</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>1070</y>
+      <width>168</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="startButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>开始游戏</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="enterEditModeButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>编辑地图</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="backToMenuButton">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>1070</y>
+      <width>80</width>
+      <height>78</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string>back</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="mapProgressBar">
+    <property name="geometry">
+     <rect>
+      <x>920</x>
+      <y>1100</y>
+      <width>341</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="saveButton">
+    <property name="geometry">
+     <rect>
+      <x>1890</x>
+      <y>310</y>
+      <width>80</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -85,6 +333,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="Resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

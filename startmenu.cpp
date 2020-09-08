@@ -30,7 +30,7 @@ void StartMenu::toStartMapSelectWindow(){
     ui->map2Button->show();
     ui->map3Button->show();
     ui->backToMenuButton->show();
-    mw.currentGameStatus = PLAYMODE;
+    mw.PLAYOREDIT = PLAYMODE;
 }
 
 void StartMenu::toEditMapSelectWindow(){
@@ -40,5 +40,5 @@ void StartMenu::toEditMapSelectWindow(){
     ui->map2Button->show();
     ui->map3Button->show();
     ui->backToMenuButton->show();
-    mw.currentGameStatus = EDITMODE;
+    mw.PLAYOREDIT = EDITMODE;
 }

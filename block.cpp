@@ -1,6 +1,6 @@
 #include "block.h"
 
-Block::Block(int x, int y, QPixmap img, QObject *parent) : QObject(parent), QGraphicsPixmapItem(img), location(x, y)
+Block::Block(int x, int y, QString inputId, QPixmap img, QObject *parent) : id(inputId), QObject(parent), QGraphicsPixmapItem(img), location(x, y)
 {
     setPos(location);
 }

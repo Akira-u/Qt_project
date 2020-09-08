@@ -2,10 +2,16 @@
     <qresource prefix="/">
         <file>pics/background.png</file>
         <file>pics/mario_stop.png</file>
-        <file>pics/brick.png</file>
         <file>pics/breakable_block.png</file>
         <file>pics/spring.png</file>
         <file>pics/fire.png</file>
         <file>pics/firestart.png</file>
+        <file>pics/ground.png</file>
+        <file>pics/moveable_brick.png</file>
+        <file>pics/licker.png</file>
+        <file>pics/jumper.png</file>
+        <file>pics/spitter.png</file>
+        <file>pics/heart.png</file>
+        <file>pics/mushroom.png</file>
     </qresource>
 </RCC>

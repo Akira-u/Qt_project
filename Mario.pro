@@ -20,7 +20,6 @@ SOURCES += \
     hero.cpp \
     main.cpp \
     mainwindow.cpp \
-    startmenu.cpp \
     trap.cpp \
     unit.cpp
 
@@ -29,13 +28,11 @@ HEADERS += \
     constants.h \
     hero.h \
     mainwindow.h \
-    startmenu.h \
     trap.h \
     unit.h
 
 FORMS += \
-    mainwindow.ui \
-    startmenu.ui
+    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -11,7 +11,7 @@ class Trap : public Block
 {
     Q_OBJECT
 public:
-    explicit Trap(int x, int y, int activeType = -1, QObject *parent = nullptr, QPixmap img=QPixmap(":/pics/firestart.png"));
+    explicit Trap(int x, int y, QString inputId, int activeType = -1, QObject *parent = nullptr, QPixmap img=QPixmap(":/pics/firestart.png"));
     void nextFrame();
     void move() override;
     void collideHero(Hero*) override;

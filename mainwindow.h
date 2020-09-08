@@ -29,7 +29,8 @@ public:
     ~MainWindow();
     void checkObjsMove();
     void checkObjsCollide();
-    int currentGameStatus = PLAYMODE;
+    int playOrEdit = PLAYMODE;
+    void switchGameStatus(int gameStatus);
 
 public slots:
     void allUpdate();

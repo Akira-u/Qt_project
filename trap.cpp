@@ -1,6 +1,6 @@
 #include "trap.h"
 #include <QDebug>
-Trap::Trap(int x, int y, int activeType, QObject *parent, QPixmap img) : Block(x, y, img, parent), isActive(activeType)
+Trap::Trap(int x, int y, QString inputId, int activeType, QObject *parent, QPixmap img) : Block(x, y, inputId, img, parent), isActive(activeType)
 {
 }
 
@@ -20,7 +20,6 @@ void Trap::move(){
 void Trap::collideHero(Hero *hero){
     if(isActive==PASSIVE&&collidesWithItem(hero)){// passive trap
         hero->beAttacked(1);
-        qDebug("crash");
         return;
     }
     //active trap

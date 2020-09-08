@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    setAcceptDrops(true);// accept drag and drop
+    switchGameStatus(STARTMODE);
     QGraphicsScene *scene = new QGraphicsScene(this);//background scene
     scene->setSceneRect(0, 0, 1000, 600);
     QPixmap backgroundImg(":/pics/background.png");
@@ -16,16 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     mario=new Hero(QPixmap(":/pics/mario_stop.png"),this);
     unitsList.push_back(mario);
-
     scene->addItem(mario);
-    mario->setPos(100,200);// init start location 无限地图下改位置也看不出来
+    mario->setPos(100,200);// init start location
     //test
-//    QGraphicsEllipseItem *mariocenter =new QGraphicsEllipseItem(mario->x(),mario->y(),1,1);
-//    scene->addItem(mariocenter);
-    Trap *t=new Trap(100, 300, PASSIVE, this);
-    scene->addItem(t);
-    blocks.push_back(t);
+
+
     //test
+    //todo: when gamemode editbuttons hide
 
     mario->grabKeyboard();// ensure keyboard event not be thrown
     ui->backgroundView->setScene(scene);
@@ -35,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     globalTimer->start();
 
     connect(globalTimer, SIGNAL(timeout()), this, SLOT(allUpdate()));
-    //connect(this, SIGNAL(heroDead()), this, SLOT(gameOver()));
+    //connect(this, SIGNAL(heroDead()), this, SLOT(gameOver())); todo: implement gameover
 }
 
 MainWindow::~MainWindow(){
@@ -47,7 +45,99 @@ MainWindow::~MainWindow(){
     //delete all units
 }
 
+void MainWindow::switchGameStatus(int gameStatus){
 
+    if(gameStatus==STARTMODE){
+        qDebug()<<"Start"<<Qt::endl;
+        QPixmap backgroundImg = QPixmap(":/pics/background.png").scaled(1000,600);
+        QPalette palette(this->palette());
+        palette.setBrush(QPalette::Background, QBrush(backgroundImg));
+        this->setPalette(palette);
+        ui->startButton->show();
+        ui->enterEditModeButton->show();
+        ui->map1Button_2->hide();
+        ui->map2Button_2->hide();
+        ui->backgroundView->hide();
+        ui->backToMenuButton->hide();
+        ui->comboBox->hide();
+        ui->elementsLabel->hide();
+        ui->mapProgressBar->hide();
+        connect(ui->startButton,&QPushButton::clicked,[=](){playOrEdit = PLAYMODE;
+            this->switchGameStatus(PLAYMODE);});
+        connect(ui->enterEditModeButton, &QPushButton::clicked, [=](){playOrEdit = EDITMODE;
+            this->switchGameStatus(EDITMODE);});
+    }
+    if(gameStatus==MAPSELECT){
+        if(playOrEdit==PLAYMODE){
+            ui->startButton->hide();
+            ui->enterEditModeButton->hide();
+            ui->map1Button_2->show();//todo:写读取
+            ui->map2Button_2->show();
+            ui->backgroundView->hide();
+            ui->backToMenuButton->show();
+            ui->comboBox->hide();
+            ui->elementsLabel->hide();
+            ui->mapProgressBar->hide();//todo:loading
+        }
+        else if(playOrEdit==EDITMODE){
+            ui->startButton->hide();
+            ui->enterEditModeButton->hide();
+            ui->map1Button_2->show();
+            ui->map2Button_2->show();
+            ui->backgroundView->hide();
+            ui->backToMenuButton->show();
+            ui->comboBox->hide();
+            ui->elementsLabel->hide();
+            ui->mapProgressBar->hide();
+        }
+    }
+    if(gameStatus==PLAYMODE){
+        ui->startButton->hide();
+        ui->enterEditModeButton->hide();
+        ui->map1Button_2->hide();
+        ui->map2Button_2->hide();
+        ui->backgroundView->show();
+        ui->backToMenuButton->show();//todo:确认会不会造成异常（由于结束game）
+        ui->comboBox->hide();
+        ui->elementsLabel->hide();
+        ui->mapProgressBar->hide();
+        QString jsonName="map.json";
+//        Map* m=new Map(jsonName,Map::State::IDLE);
+//        Util::RemoveLayout(centralWidget());
+
+        connect(ui->backToMenuButton, SIGNAL(clicked()), this, SLOT(switchGameStatus(STARTMODE)));
+//        backToMenuButton->setParent(m);
+//        backToMenuButton->setGeometry(this->width()-110,10,100,50);
+        ui->backToMenuButton->show();
+//        setCentralWidget(m);
+    }
+    if(gameStatus==EDITMODE){
+        ui->startButton->hide();
+        ui->enterEditModeButton->hide();
+        ui->map1Button_2->hide();
+        ui->map2Button_2->hide();
+        ui->backgroundView->show();
+        ui->backToMenuButton->show();
+        ui->comboBox->show();
+        ui->elementsLabel->show();
+        ui->mapProgressBar->hide();
+        QString jsonName="map.json";
+//        Map* m=new Map(jsonName,Map::State::EDIT);
+//        Util::RemoveLayout(centralWidget());
+
+        connect(ui->backToMenuButton,SIGNAL(clicked()),this, SLOT(switchGameStatus(STARTMODE)));
+//        returnBack->setParent(m);
+//        backToMenuButton->setGeometry(this->width()-110,10,100,50);
+        ui->backToMenuButton->show();
+//        setCentralWidget(m);
+
+
+
+//        connect(dock,&Dock::save,m,&Map::save);
+    }
+
+
+}
 void MainWindow::checkObjsMove(){
     if(mario->getHorizontalMoveStatus() != STOP){
         mario->moveBy(mario->getHorizontalMoveStatus() * mario->getHorizontalSpeed(), 0);
