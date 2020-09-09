@@ -13,5 +13,6 @@
         <file>pics/spitter.png</file>
         <file>pics/heart.png</file>
         <file>pics/mushroom.png</file>
+        <file>pics/fireball.png</file>
     </qresource>
 </RCC>

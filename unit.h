@@ -13,6 +13,10 @@ class Unit : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     explicit Unit(QPixmap pix, QObject *parent = nullptr);
+    QString id;
+    virtual QString gameType(){
+        return "unit";
+    }
     // functions about move
     int getHorizontalSpeed() const;
 

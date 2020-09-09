@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>2000</width>
-    <height>1200</height>
+    <width>2100</width>
+    <height>1300</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -53,8 +53,8 @@
      <rect>
       <x>1870</x>
       <y>140</y>
-      <width>121</width>
-      <height>22</height>
+      <width>191</width>
+      <height>71</height>
      </rect>
     </property>
     <item>
@@ -167,58 +167,25 @@
      <rect>
       <x>1870</x>
       <y>90</y>
-      <width>111</width>
+      <width>221</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
     </property>
     <property name="text">
      <string>请选择要添加的元素</string>
     </property>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>1070</y>
-      <width>171</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="map1Button_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>map1</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="map2Button_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>map2</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
       <x>350</x>
       <y>1070</y>
-      <width>168</width>
+      <width>342</width>
       <height>80</height>
      </rect>
     </property>
@@ -254,9 +221,9 @@
    <widget class="QPushButton" name="backToMenuButton">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>710</x>
       <y>1070</y>
-      <width>80</width>
+      <width>151</width>
       <height>78</height>
      </rect>
     </property>
@@ -288,13 +255,51 @@
      <rect>
       <x>1890</x>
       <y>310</y>
-      <width>80</width>
-      <height>61</height>
+      <width>111</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="text">
      <string>Save</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>1450</x>
+      <y>1080</y>
+      <width>281</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="map1Button_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>map1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="map2Button_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>map2</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -302,7 +307,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>2000</width>
+     <width>2100</width>
      <height>21</height>
     </rect>
    </property>

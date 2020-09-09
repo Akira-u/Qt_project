@@ -7,8 +7,10 @@ class Hero : public Unit
 {
     Q_OBJECT
 public:
-    explicit Hero(QPixmap pix, QObject *parent = nullptr);
-
+    explicit Hero(QObject *parent = nullptr, QPixmap pix = QPixmap(":/pics/mario_stop.png"));
+    QString gameType() override{
+        return "hero";
+    }
 
 
 protected:

@@ -18,6 +18,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     block.cpp \
     hero.cpp \
+    jumper.cpp \
+    licker.cpp \
     main.cpp \
     mainwindow.cpp \
     trap.cpp \
@@ -27,6 +29,8 @@ HEADERS += \
     block.h \
     constants.h \
     hero.h \
+    jumper.h \
+    licker.h \
     mainwindow.h \
     trap.h \
     unit.h

@@ -12,6 +12,11 @@
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QKeyEvent>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QMessageBox>
+#include <QDir>
 
 
 
@@ -32,6 +37,9 @@ public:
     int playOrEdit = PLAYMODE;
     void switchGameStatus(int gameStatus);
 
+    void read(const QString& fileName);
+    void write(const QString& fileName);
+
 public slots:
     void allUpdate();
     //void gameOver();//todo implement
@@ -40,9 +48,10 @@ signals:
 
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene *backgroundScene;
     QList<Unit*> unitsList;
-    Hero *mario;// the pointer of unique hero
+    Hero *mario = nullptr;// the pointer of unique hero
     //to do: write class Monster inheriting Item and add list of monsters
-    QList<Block *>blocks;
+    QList<Block *>blocksList;
 };
 #endif // MAINWINDOW_H

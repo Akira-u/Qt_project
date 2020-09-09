@@ -7,48 +7,75 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setAcceptDrops(true);// accept drag and drop
     switchGameStatus(STARTMODE);
-    connect(ui->backToMenuButton, &QPushButton::clicked, [=](){this->switchGameStatus(STARTMODE);});
-    QGraphicsScene *scene = new QGraphicsScene(this);//background scene
-    scene->setSceneRect(0, 0, 1000, 600);
+
+    backgroundScene = new QGraphicsScene(this);//background scene
+    backgroundScene->setSceneRect(0, 0, 1861, 1061);
     QPixmap backgroundImg(":/pics/background.png");
-    backgroundImg.scaled(1000,600);
-    scene->setBackgroundBrush(QBrush(backgroundImg));
+    backgroundImg.scaled(1861,1061);
+    backgroundScene->setBackgroundBrush(QBrush(backgroundImg));
 
+
+    //test
+    if(mario==nullptr){
     mario=new Hero(this);
-    unitsList.push_back(mario);
-    scene->addItem(mario);
+    unitsList.push_front(mario);
+    backgroundScene->addItem(mario);
     mario->setPos(100,200);// init start location
+    }
     //test
-
-
-    //test
-    //todo: when gamemode editbuttons hide
 
     mario->grabKeyboard();// ensure keyboard event not be thrown
-    ui->backgroundView->setScene(scene);
+    ui->backgroundView->setScene(backgroundScene);
 
     QTimer *globalTimer = new QTimer(this);
     globalTimer->setInterval(TIMER_INTERVAL);//可以调整间隔改变平滑度
     globalTimer->start();
 
     connect(globalTimer, SIGNAL(timeout()), this, SLOT(allUpdate()));
+    connect(ui->startButton,&QPushButton::clicked,[=](){playOrEdit = PLAYMODE;
+        this->switchGameStatus(MAPSELECT);});
+    connect(ui->enterEditModeButton, &QPushButton::clicked, [=](){playOrEdit = EDITMODE;
+        this->switchGameStatus(MAPSELECT);});
     connect(ui->map1Button_2, &QPushButton::clicked, [=](){
-        if(!ui->backgroundView->isVisible()) //hiden in edit scene
+        if(!ui->backgroundView->isVisible()){ //hiden in edit scene
+            if(playOrEdit==EDITMODE){
             this->read("map1.json");
-        else
-            this->write("map2.json");});
+            this->switchGameStatus(EDITMODE);
+            }
+            else{
+                this->read("map1.json");
+                this->switchGameStatus(PLAYMODE);
+            }
+        }
+        else{
+            this->write("map2.json");
+            ui->map1Button_2->hide();
+            ui->map2Button_2->hide();
+        }});
     connect(ui->map2Button_2, &QPushButton::clicked, [=](){
-        if(!ui->backgroundView->isVisible())
+        if(!ui->backgroundView->isVisible()){
+            if(playOrEdit==EDITMODE){
             this->read("map2.json");
-        else
-            this->write("map2.json");});
+            this->switchGameStatus(EDITMODE);
+            }
+            else{
+                this->read("map2.json");
+                this->switchGameStatus(PLAYMODE);
+            }
+        }
+        else{
+            this->write("map2.json");
+            ui->map1Button_2->hide();
+            ui->map2Button_2->hide();
+
+        }});
     connect(ui->saveButton, &QPushButton::clicked, [=](){
         if(ui->backgroundView->isVisible()){
             ui->map1Button_2->show();
             ui->map2Button_2->show();
         }});
+    connect(ui->backToMenuButton, &QPushButton::clicked, [=](){this->switchGameStatus(STARTMODE);});
     //connect(this, SIGNAL(heroDead()), this, SLOT(gameOver())); todo: implement gameover
 }
 
@@ -81,10 +108,7 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->elementsLabel->hide();
         ui->mapProgressBar->hide();
         ui->saveButton->hide();
-        connect(ui->startButton,&QPushButton::clicked,[=](){playOrEdit = PLAYMODE;
-            this->switchGameStatus(MAPSELECT);});
-        connect(ui->enterEditModeButton, &QPushButton::clicked, [=](){playOrEdit = EDITMODE;
-            this->switchGameStatus(MAPSELECT);});
+
     }
     if(gameStatus==MAPSELECT){//select maps, meanwhile, play or edit is recorded
         if(playOrEdit==PLAYMODE){
@@ -127,13 +151,8 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->elementsLabel->hide();
         ui->mapProgressBar->hide();
         ui->saveButton->hide();
-        QString jsonName="map.json";
-//        Map* m=new Map(jsonName,Map::State::IDLE);
-//        Util::RemoveLayout(centralWidget());
-
-        connect(ui->backToMenuButton, SIGNAL(clicked()), this, SLOT(switchGameStatus(STARTMODE)));
         ui->backToMenuButton->show();
-//        setCentralWidget(m);
+
     }
     if(gameStatus==EDITMODE){
         playOrEdit = PLAYMODE;
@@ -146,13 +165,8 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->comboBox->show();
         ui->elementsLabel->show();
         ui->mapProgressBar->hide();
-        ui->saveButton->show();//todo connect
-        QString jsonName="map.json";
-//        Map* m=new Map(jsonName,Map::State::EDIT);
-//        Util::RemoveLayout(centralWidget());
-
+        ui->saveButton->show();
         ui->backToMenuButton->show();
-//        setCentralWidget(m);
 
 
 
@@ -220,7 +234,7 @@ void MainWindow::read(const QString &fileName)
     QFile mapfile(fileName);
     if(!mapfile.exists()){
         qDebug()<<"file not exist"<<Qt::endl;
-        return;}
+    }
     if(!mapfile.open(QIODevice::ReadOnly)){
         qDebug()<<"some error when read the file"<<Qt::endl;
         return;
@@ -252,6 +266,7 @@ void MainWindow::read(const QString &fileName)
             auto h = new Hero(this);
             h->setPos(x,y);
             unitsList.push_front(h);
+            backgroundScene->addItem(h);
         }
 
     }
