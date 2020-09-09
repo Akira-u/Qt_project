@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     backgroundImg.scaled(1000,600);
     scene->setBackgroundBrush(QBrush(backgroundImg));
 
-    mario=new Hero(QPixmap(":/pics/mario_stop.png"),this);
+    mario=new Hero(this);
     unitsList.push_back(mario);
     scene->addItem(mario);
     mario->setPos(100,200);// init start location
@@ -34,16 +34,33 @@ MainWindow::MainWindow(QWidget *parent)
     globalTimer->start();
 
     connect(globalTimer, SIGNAL(timeout()), this, SLOT(allUpdate()));
+    connect(ui->map1Button_2, &QPushButton::clicked, [=](){
+        if(!ui->backgroundView->isVisible()) //hiden in edit scene
+            this->read("map1.json");
+        else
+            this->write("map2.json");});
+    connect(ui->map2Button_2, &QPushButton::clicked, [=](){
+        if(!ui->backgroundView->isVisible())
+            this->read("map2.json");
+        else
+            this->write("map2.json");});
+    connect(ui->saveButton, &QPushButton::clicked, [=](){
+        if(ui->backgroundView->isVisible()){
+            ui->map1Button_2->show();
+            ui->map2Button_2->show();
+        }});
     //connect(this, SIGNAL(heroDead()), this, SLOT(gameOver())); todo: implement gameover
 }
 
 MainWindow::~MainWindow(){
     delete ui;
-    //delete mario; delete in beattacked()
-    for(auto i:blocks){
+    for(auto i:unitsList){
         delete i;
     }
-    //delete all units
+    //delete mario; delete in beattacked()
+    for(auto i:blocksList){
+        delete i;
+    }
 }
 
 void MainWindow::switchGameStatus(int gameStatus){
@@ -180,8 +197,8 @@ void MainWindow::allUpdate(){// check all things needed to be check periodically
     if(!mario->isVisible()){
         emit heroDead();
     }
-    if(!blocks.isEmpty()){
-        for(auto i:blocks){
+    if(!blocksList.isEmpty()){
+        for(auto i:blocksList){
             i->collideHero(mario);
         }
     }
@@ -196,4 +213,75 @@ void MainWindow::allUpdate(){// check all things needed to be check periodically
 
     update();
 
+}
+void MainWindow::read(const QString &fileName)
+{
+    qDebug()<< QDir::currentPath() <<Qt::endl;
+    QFile mapfile(fileName);
+    if(!mapfile.exists()){
+        qDebug()<<"file not exist"<<Qt::endl;
+        return;}
+    if(!mapfile.open(QIODevice::ReadOnly)){
+        qDebug()<<"some error when read the file"<<Qt::endl;
+        return;
+    }
+    QByteArray allData=mapfile.readAll();
+    QJsonParseError jsonError;
+    QJsonDocument jsonDoc(QJsonDocument::fromJson(allData,&jsonError));
+
+    if(jsonError.error!=QJsonParseError::NoError){
+        qDebug()<<"json parse error"<<Qt::endl;
+        return ;
+    }
+    QVariantList dataList=jsonDoc.toVariant().toList();
+    for(QVariant &data:dataList){
+        QVariantMap dataMap=data.toMap();
+        QString type=dataMap.value("type").toString();
+        int x=dataMap.value("x").toInt();
+        int y=dataMap.value("y").toInt();
+        if(type.isNull()){
+            qDebug()<<"Invalid data format";
+        }
+        if(type==""){//todo:把每个类都写出来
+
+        }
+        else if(type==""){
+
+        }
+        else if (type=="hero"){
+            auto h = new Hero(this);
+            h->setPos(x,y);
+            unitsList.push_front(h);
+        }
+
+    }
+}
+void MainWindow::write(const QString &fileName)
+{
+    QFile mapfile(fileName);
+    QJsonArray jsonArray;
+    for(auto u:unitsList){
+        QJsonObject obj;
+        obj.insert("type",u->gameType());
+        obj.insert("x",u->x());
+        obj.insert("y",u->y());
+        jsonArray.append(obj);
+    }
+    for(auto b:blocksList){
+        QJsonObject obj;
+        obj.insert("type",b->gameType());
+        obj.insert("x",b->x());
+        obj.insert("y",b->y());
+        jsonArray.append(obj);
+    }
+    QJsonDocument doc(jsonArray);
+    QByteArray ba=doc.toJson(QJsonDocument::Indented);
+    if(!mapfile.open(QIODevice::WriteOnly)){
+        qDebug()<<"file write error"<<Qt::endl;
+    }
+    mapfile.write(ba);
+    mapfile.close();
+    QMessageBox msgBox;
+    msgBox.setText("The Map has been save successfully!");
+    msgBox.exec();
 }
