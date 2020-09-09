@@ -1,6 +1,6 @@
 #include "hero.h"
 #include<QDebug>
-Hero::Hero(QPixmap pix, QObject *parent) : Unit(pix, parent){}
+Hero::Hero(QPixmap pix, QString inputid, QObject *parent) : Unit(pix, inputid, parent){}
 
 
 

@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setAcceptDrops(true);// accept drag and drop
     switchGameStatus(STARTMODE);
+    connect(ui->backToMenuButton, &QPushButton::clicked, [=](){this->switchGameStatus(STARTMODE);});
     QGraphicsScene *scene = new QGraphicsScene(this);//background scene
     scene->setSceneRect(0, 0, 1000, 600);
     QPixmap backgroundImg(":/pics/background.png");
@@ -62,36 +63,43 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->comboBox->hide();
         ui->elementsLabel->hide();
         ui->mapProgressBar->hide();
+        ui->saveButton->hide();
         connect(ui->startButton,&QPushButton::clicked,[=](){playOrEdit = PLAYMODE;
-            this->switchGameStatus(PLAYMODE);});
+            this->switchGameStatus(MAPSELECT);});
         connect(ui->enterEditModeButton, &QPushButton::clicked, [=](){playOrEdit = EDITMODE;
-            this->switchGameStatus(EDITMODE);});
+            this->switchGameStatus(MAPSELECT);});
     }
-    if(gameStatus==MAPSELECT){
+    if(gameStatus==MAPSELECT){//select maps, meanwhile, play or edit is recorded
         if(playOrEdit==PLAYMODE){
             ui->startButton->hide();
             ui->enterEditModeButton->hide();
             ui->map1Button_2->show();//todo:写读取
             ui->map2Button_2->show();
+
             ui->backgroundView->hide();
-            ui->backToMenuButton->show();
+            ui->backToMenuButton->show();// implemented in construct function
+
             ui->comboBox->hide();
             ui->elementsLabel->hide();
             ui->mapProgressBar->hide();//todo:loading
+            ui->saveButton->hide();
         }
         else if(playOrEdit==EDITMODE){
             ui->startButton->hide();
             ui->enterEditModeButton->hide();
             ui->map1Button_2->show();
             ui->map2Button_2->show();
+
             ui->backgroundView->hide();
             ui->backToMenuButton->show();
             ui->comboBox->hide();
             ui->elementsLabel->hide();
             ui->mapProgressBar->hide();
+            ui->saveButton->hide();
         }
     }
     if(gameStatus==PLAYMODE){
+        playOrEdit = PLAYMODE;
         ui->startButton->hide();
         ui->enterEditModeButton->hide();
         ui->map1Button_2->hide();
@@ -101,17 +109,17 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->comboBox->hide();
         ui->elementsLabel->hide();
         ui->mapProgressBar->hide();
+        ui->saveButton->hide();
         QString jsonName="map.json";
 //        Map* m=new Map(jsonName,Map::State::IDLE);
 //        Util::RemoveLayout(centralWidget());
 
         connect(ui->backToMenuButton, SIGNAL(clicked()), this, SLOT(switchGameStatus(STARTMODE)));
-//        backToMenuButton->setParent(m);
-//        backToMenuButton->setGeometry(this->width()-110,10,100,50);
         ui->backToMenuButton->show();
 //        setCentralWidget(m);
     }
     if(gameStatus==EDITMODE){
+        playOrEdit = PLAYMODE;
         ui->startButton->hide();
         ui->enterEditModeButton->hide();
         ui->map1Button_2->hide();
@@ -121,13 +129,11 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->comboBox->show();
         ui->elementsLabel->show();
         ui->mapProgressBar->hide();
+        ui->saveButton->show();//todo connect
         QString jsonName="map.json";
 //        Map* m=new Map(jsonName,Map::State::EDIT);
 //        Util::RemoveLayout(centralWidget());
 
-        connect(ui->backToMenuButton,SIGNAL(clicked()),this, SLOT(switchGameStatus(STARTMODE)));
-//        returnBack->setParent(m);
-//        backToMenuButton->setGeometry(this->width()-110,10,100,50);
         ui->backToMenuButton->show();
 //        setCentralWidget(m);
 
