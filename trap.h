@@ -16,7 +16,8 @@ public:
     void move() override;
     void collideHero(Hero*) override;
     QString gameType() override{
-        return "trap";
+        if(isActive==PASSIVE) return "passive trap";
+        else return "active trap";
     }
 signals:
 private:

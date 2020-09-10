@@ -19,7 +19,7 @@ void Trap::move(){
 
 void Trap::collideHero(Hero *hero){
     if(isActive==PASSIVE&&collidesWithItem(hero)){// passive trap
-        hero->beAttacked(1);
+        hero->beAttacked();
         return;
     }
     //active trap
@@ -29,7 +29,7 @@ void Trap::collideHero(Hero *hero){
         move();
     }
     if(collidesWithItem(hero)){
-        hero->beAttacked(1);
+        hero->beAttacked();
         isActive = PASSIVE;
     }
 }

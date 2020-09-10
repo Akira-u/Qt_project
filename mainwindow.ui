@@ -64,6 +64,15 @@
     </item>
     <item>
      <property name="text">
+      <string>Hero</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/mario_stop.png</normaloff>:/pics/mario_stop.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Ground</string>
      </property>
      <property name="icon">
@@ -301,25 +310,6 @@
      </item>
     </layout>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>2100</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>地图菜单</string>
-    </property>
-    <addaction name="actionSave_map"/>
-    <addaction name="actionRead_map"/>
-    <addaction name="actionEdit_map"/>
-   </widget>
-   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionSave_map">

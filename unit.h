@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include <QKeyEvent>
+#include <QGraphicsSceneMouseEvent>
 
 
 class Unit : public QObject, public QGraphicsPixmapItem
@@ -13,7 +14,6 @@ class Unit : public QObject, public QGraphicsPixmapItem
     Q_OBJECT
 public:
     explicit Unit(QPixmap pix, QObject *parent = nullptr);
-    QString id;
     virtual QString gameType(){
         return "unit";
     }
@@ -30,6 +30,7 @@ public:
     int getVerticalMoveStatus() const;
     void setVerticalMoveStatus(int dir);
 
+    virtual void move();
 
     // Members about collide
 //    QRectF boundingRect() const override;
@@ -41,21 +42,22 @@ public:
     bool isLeftBlocked;
     int width;
     int height;
+    virtual void monsterAttackHero(Unit *);
 
     //functions about health
-    void attack();//todo:implement
-    void beAttacked(int);
+
+    void beAttacked();
 protected:
-
-signals:
-
-private:
     int horizontalSpeed = 5;
     int horizontalMoveStatus = STOP;// move during A/D is pressed
     double verticalSpeed = 0;// free fall, need to be set
     int verticalMoveStatus = STOP;
+    int attackInterval = 1000 / TIMER_INTERVAL;
+signals:
 
+private:
     int health = 1;
+
 };
 
 #endif // UNIT_H

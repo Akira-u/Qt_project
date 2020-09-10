@@ -3,6 +3,7 @@
 #include "unit.h"
 #include <QObject>
 
+
 class Hero : public Unit
 {
     Q_OBJECT
@@ -11,11 +12,14 @@ public:
     QString gameType() override{
         return "hero";
     }
-
-
+    void move() override;
+    void monsterAttackHero(Unit *) override{}
+    void attack();//todo:implement
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+    //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
 
 signals:
 

@@ -21,24 +21,22 @@ MainWindow::MainWindow(QWidget *parent)
     mario=new Hero(this);
     unitsList.push_front(mario);
     backgroundScene->addItem(mario);
-    mario->setPos(100,200);// init start location
+    mario->setPos(STARTPOINT_X,STARTPOINT_Y);// init start location
     }
     //test
 
     mario->grabKeyboard();// ensure keyboard event not be thrown
+    mario->grabMouse();
     ui->backgroundView->setScene(backgroundScene);
-
-    QTimer *globalTimer = new QTimer(this);
+    globalTimer = new QTimer(this);
     globalTimer->setInterval(TIMER_INTERVAL);//可以调整间隔改变平滑度
-    globalTimer->start();
-
     connect(globalTimer, SIGNAL(timeout()), this, SLOT(allUpdate()));
     connect(ui->startButton,&QPushButton::clicked,[=](){playOrEdit = PLAYMODE;
         this->switchGameStatus(MAPSELECT);});
     connect(ui->enterEditModeButton, &QPushButton::clicked, [=](){playOrEdit = EDITMODE;
         this->switchGameStatus(MAPSELECT);});
     connect(ui->map1Button_2, &QPushButton::clicked, [=](){
-        if(!ui->backgroundView->isVisible()){ //hiden in edit scene
+        if(!ui->backgroundView->isVisible()){ //hiden in mapselect scene
             if(playOrEdit==EDITMODE){
             this->read("map1.json");
             this->switchGameStatus(EDITMODE);
@@ -49,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
         else{
-            this->write("map2.json");
+            this->write("map1.json");
             ui->map1Button_2->hide();
             ui->map2Button_2->hide();
         }});
@@ -81,18 +79,21 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){
     delete ui;
+    delete globalTimer;
     for(auto i:unitsList){
-        delete i;
+
+        if(i!=nullptr) delete i;
     }
-    //delete mario; delete in beattacked()
+
     for(auto i:blocksList){
-        delete i;
+        if(i!=nullptr) delete i;
     }
 }
 
 void MainWindow::switchGameStatus(int gameStatus){
 
     if(gameStatus==STARTMODE){
+
         qDebug()<<"Start"<<Qt::endl;
         QPixmap backgroundImg = QPixmap(":/pics/background.png").scaled(1000,600);
         QPalette palette(this->palette());
@@ -104,6 +105,7 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->map2Button_2->hide();
         ui->backgroundView->hide();
         ui->backToMenuButton->hide();
+        ui->comboBox->setCurrentText("Null");
         ui->comboBox->hide();
         ui->elementsLabel->hide();
         ui->mapProgressBar->hide();
@@ -111,33 +113,39 @@ void MainWindow::switchGameStatus(int gameStatus){
 
     }
     if(gameStatus==MAPSELECT){//select maps, meanwhile, play or edit is recorded
-        if(playOrEdit==PLAYMODE){
-            ui->startButton->hide();
-            ui->enterEditModeButton->hide();
-            ui->map1Button_2->show();//todo:写读取
-            ui->map2Button_2->show();
+        //if(playOrEdit==PLAYMODE){
 
-            ui->backgroundView->hide();
-            ui->backToMenuButton->show();// implemented in construct function
-
-            ui->comboBox->hide();
-            ui->elementsLabel->hide();
-            ui->mapProgressBar->hide();//todo:loading
-            ui->saveButton->hide();
-        }
-        else if(playOrEdit==EDITMODE){
             ui->startButton->hide();
             ui->enterEditModeButton->hide();
             ui->map1Button_2->show();
             ui->map2Button_2->show();
 
             ui->backgroundView->hide();
-            ui->backToMenuButton->show();
+            ui->backToMenuButton->show();// implemented in construct function
+
+            ui->comboBox->setCurrentText("Null");
             ui->comboBox->hide();
             ui->elementsLabel->hide();
-            ui->mapProgressBar->hide();
+            ui->mapProgressBar->hide();//todo:loading
             ui->saveButton->hide();
-        }
+        //}
+//        else if(playOrEdit==EDITMODE){
+
+//            ui->startButton->hide();
+//            ui->enterEditModeButton->hide();
+//            ui->map1Button_2->show();
+//            ui->map2Button_2->show();
+
+//            ui->backgroundView->hide();
+//            ui->backToMenuButton->show();
+
+//            ui->comboBox->setCurrentText("Null");
+//            ui->comboBox->hide();
+//            ui->elementsLabel->hide();
+//            ui->mapProgressBar->hide();
+//            ui->saveButton->hide();
+
+//        }
     }
     if(gameStatus==PLAYMODE){
         playOrEdit = PLAYMODE;
@@ -147,89 +155,99 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->map2Button_2->hide();
         ui->backgroundView->show();
         ui->backToMenuButton->show();//todo:确认会不会造成异常（由于结束game）
+
+        ui->comboBox->setCurrentText("Null");
         ui->comboBox->hide();
         ui->elementsLabel->hide();
         ui->mapProgressBar->hide();
         ui->saveButton->hide();
         ui->backToMenuButton->show();
 
+        globalTimer->start();
+
+
+
     }
     if(gameStatus==EDITMODE){
-        playOrEdit = PLAYMODE;
+        playOrEdit = EDITMODE;
         ui->startButton->hide();
         ui->enterEditModeButton->hide();
         ui->map1Button_2->hide();
         ui->map2Button_2->hide();
         ui->backgroundView->show();
         ui->backToMenuButton->show();
+
+        ui->comboBox->setCurrentText("Null");
         ui->comboBox->show();
         ui->elementsLabel->show();
         ui->mapProgressBar->hide();
         ui->saveButton->show();
         ui->backToMenuButton->show();
-
-
-
-//        connect(dock,&Dock::save,m,&Map::save);
+        globalTimer->stop();
     }
 
 
 }
 void MainWindow::checkObjsMove(){
-    if(mario->getHorizontalMoveStatus() != STOP){
-        mario->moveBy(mario->getHorizontalMoveStatus() * mario->getHorizontalSpeed(), 0);
+    for(auto u:unitsList){
+        u->move();
     }
-    // left out = right in
-    if(mario->pos().x()<0){
-        mario->setX(999);
-    }
-    else if(mario->pos().x()>1000){
-        mario->setX(1);
-    }
-    if(!mario->isOnGround){//drop
-        mario->setVerticalMoveStatus(DOWN);
-
-        mario->setVerticalSpeed(mario->getVerticalSpeed() + G);//up is -, down is +
-        mario->moveBy(0, mario->getVerticalSpeed());
-
-
-    }
-    //to do: add check of monsters becareful of nptr
-    //todo：不能跳出去
+    //to do: add check of monsters attack
 }
 void MainWindow::checkObjsCollide(){
-    for(auto i:unitsList){
-        if(i!=nullptr){
-            i->checkCollideDirection();
+    for(auto u:unitsList){
+        if(u!=nullptr){
+            if(u->gameType()!="spitter"){
+                u->monsterAttackHero(mario);
+            }
+            else{
+                Spitter *s=static_cast<Spitter *>(u);
+                s->farAttackHero(mario, backgroundScene, unitsList);
+            }
+            u->checkCollideDirection();
         }
     }
 }
 
 void MainWindow::allUpdate(){// check all things needed to be check periodically
-    checkObjsCollide();
+
     checkObjsMove();
+    checkObjsCollide();
     if(!mario->isVisible()){
         emit heroDead();
     }
-    if(!blocksList.isEmpty()){
-        for(auto i:blocksList){
-            i->collideHero(mario);
-        }
-    }
-    if(!unitsList.isEmpty()){
-        for(int i=0;i<unitsList.size();i++){
-            if(!unitsList[i]->isVisible()){
-                unitsList.removeAt(i);
+    if(!blocksList.isEmpty()){// terrain damage
+        for(auto b:blocksList){
+            b->collideHero(mario);
+            if(!b->isVisible()){
+                blocksList.removeOne(b);
+                if(b) delete b;
             }
         }
     }
-// todo:check unitlist and clear dead
+    if(!unitsList.isEmpty()){// clear dead units
+        for(int u=0;u<unitsList.size();u++){
+            if(!unitsList[u]->isVisible()){
+                if(unitsList[u]) delete unitsList[u];
+                unitsList.removeAt(u);
+            }
+        }
+    }
+
 
     update();
 
 }
 void MainWindow::read(const QString &fileName)
 {
+    for(auto u:unitsList){
+
+        if(u!=nullptr&&u->gameType()!="hero") delete u;
+    }
+
+    for(auto b:blocksList){
+        if(b!=nullptr) delete b;
+    }
     qDebug()<< QDir::currentPath() <<Qt::endl;
     QFile mapfile(fileName);
     if(!mapfile.exists()){
@@ -256,13 +274,61 @@ void MainWindow::read(const QString &fileName)
         if(type.isNull()){
             qDebug()<<"Invalid data format";
         }
-        if(type==""){//todo:把每个类都写出来
-
+        if(type=="block"){//todo:把每个类都写出来
+            auto b = new Block(x, y);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
         }
-        else if(type==""){
-
+//        else if(type=="Breakable brick"){
+//            auto b = new BreakableBlock(x, y);
+//            blocksList.push_back(b);
+//            backgroundScene->addItem(b);
+//        }
+//        else if(type=="Move brick"){
+//            auto b = new MoveBlock(x, y);
+//            blocksList.push_back(b);
+//            backgroundScene->addItem(b);
+//        }
+//        else if(type=="spring"){
+//            auto b = new Spring(x, y);
+//            blocksList.push_back(b);
+//            backgroundScene->addItem(b);
+//        }
+        else if(type=="passive trap"){
+            auto b = new Trap(x, y, PASSIVE);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
         }
+        else if(type=="active trap"){
+            auto b = new Trap(x, y, NOT_TRIGGERED);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
+        //todo mush
+        else if(type=="licker"){
+            auto u = new Licker;
+            u->setPos(x,y);
+            unitsList.push_back(u);
+            backgroundScene->addItem(u);
+        }
+        else if(type=="jumper"){
+            auto u = new Jumper;
+            u->setPos(x,y);
+            unitsList.push_back(u);
+            backgroundScene->addItem(u);
+        }
+        else if(type=="spitter"){
+            auto u = new Spitter;
+            u->setPos(x,y);
+            unitsList.push_back(u);
+            backgroundScene->addItem(u);
+        }
+
         else if (type=="hero"){
+            if(unitsList.first()->gameType()=="hero"){
+                qDebug("read multiple hero!");
+                continue;//only one hero
+            }
             auto h = new Hero(this);
             h->setPos(x,y);
             unitsList.push_front(h);
@@ -276,6 +342,9 @@ void MainWindow::write(const QString &fileName)
     QFile mapfile(fileName);
     QJsonArray jsonArray;
     for(auto u:unitsList){
+        if(u->gameType()=="bullet"||!u->isVisible()){
+            continue;// bullets won't be saved
+        }
         QJsonObject obj;
         obj.insert("type",u->gameType());
         obj.insert("x",u->x());
@@ -283,6 +352,9 @@ void MainWindow::write(const QString &fileName)
         jsonArray.append(obj);
     }
     for(auto b:blocksList){
+        if(!b->isVisible()){
+            continue;
+        }
         QJsonObject obj;
         obj.insert("type",b->gameType());
         obj.insert("x",b->x());
@@ -294,9 +366,81 @@ void MainWindow::write(const QString &fileName)
     if(!mapfile.open(QIODevice::WriteOnly)){
         qDebug()<<"file write error"<<Qt::endl;
     }
-    mapfile.write(ba);
+    mapfile.write(ba);//todo clear?
     mapfile.close();
     QMessageBox msgBox;
     msgBox.setText("The Map has been save successfully!");
     msgBox.exec();
 }
+void MainWindow::mousePressEvent(QMouseEvent *event){
+
+    if(event->button()==Qt::LeftButton&&playOrEdit==EDITMODE&&ui->backgroundView->isVisible()&&event->x()<=ui->backgroundView->width()&&event->y()<=ui->backgroundView->height()){
+        if(ui->backgroundView->itemAt(event->x(), event->y())) return;
+        if(ui->comboBox->currentText()=="Null") {
+            return;
+        }
+        else if(ui->comboBox->currentText()=="Ground"){
+            Block *b=new Block(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
+//        else if(ui->comboBox->currentText()=="Breakable brick"){
+//            brickableBrick *b=new brickableBrick(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+//            blocksList.push_back(b);
+//            backgroundScene->addItem(b);
+//        }
+//        else if(ui->comboBox->currentText()=="Move brick"){
+//            MoveBrick *b=new MoveBrick(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+//            blocksList.push_back(b);
+//            backgroundScene->addItem(b);
+//        }
+//        else if(ui->comboBox->currentText()=="Spring"){
+//            Spring *b=new Spring(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+//            blocksList.push_back(b);
+//            backgroundScene->addItem(b);
+//        }
+        else if(ui->comboBox->currentText()=="Passive trap"){
+            Trap *b=new Trap(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
+        else if(ui->comboBox->currentText()=="Active trap"){
+            Trap *b=new Trap(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH, NOT_TRIGGERED);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
+        else if(ui->comboBox->currentText()=="Licker"){
+            Licker *u=new Licker;
+            u->setPos(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            unitsList.push_back(u);
+            backgroundScene->addItem(u);
+        }
+        else if(ui->comboBox->currentText()=="Jumper"){
+            Jumper *u=new Jumper;
+            u->setPos(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            unitsList.push_back(u);
+            backgroundScene->addItem(u);
+        }
+        else if(ui->comboBox->currentText()=="Spitter"){
+            Spitter *u=new Spitter;
+            u->setPos(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            unitsList.push_back(u);
+            backgroundScene->addItem(u);
+        }
+        //todo flower and mush
+        repaint();
+        QTimer::singleShot(50, [](){});
+    }
+    // rightButton delete items
+    else if(event->button()==Qt::RightButton&&playOrEdit==EDITMODE&&ui->backgroundView->isVisible()&&event->x()<=ui->backgroundView->width()&&event->y()<=ui->backgroundView->height()){
+        auto item = ui->backgroundView->itemAt(event->x(), event->y());
+        if(item){
+            item->hide();
+            repaint();
+        }
+    }
+}
+
+
+
+
