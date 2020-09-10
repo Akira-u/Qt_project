@@ -80,7 +80,8 @@ void Unit::checkCollideDirection(){
         bool rightFlag = 0;
         for(auto i:collideItemsList){// find Items on the buttom of hero
             if(i->y() > y()&&(i->y() - y()<=height/2 + i->boundingRect().height()/2+EPS&&i->y() - y()>=height/2 + i->boundingRect().height()/2-EPS)){// ensure up and down collide
-
+qDebug("enter ground check");
+qDebug()<<isOnGround<<collideItemsList.size();
                 setVerticalSpeed(0);// reset vv
                 setVerticalMoveStatus(STOP);
                 isOnGround = true;
@@ -118,6 +119,12 @@ void Unit::checkCollideDirection(){
             isLeftBlocked = false;
         }
 
+    }
+    else{
+        isOnGround = false;
+        isFloorBlocked = false;
+        isRightBlocked = false;
+        isLeftBlocked = false;
     }
 
 }
