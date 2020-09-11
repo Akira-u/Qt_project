@@ -7,6 +7,7 @@
 #include <QGraphicsItem>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QMessageBox>
 
 
 class Unit : public QObject, public QGraphicsPixmapItem
@@ -44,11 +45,17 @@ public:
     int width;
     int height;
     virtual void monsterAttackHero(Unit *);
-
+    void setIsOnGround(bool value);
 
     //functions about health
 
     void beAttacked();
+    void setHealth(int value);
+
+    int getHealth() const;
+
+
+
 protected:
     int horizontalSpeed = 5;
     int horizontalMoveStatus = STOP;// move during A/D is pressed

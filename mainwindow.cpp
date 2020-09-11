@@ -227,7 +227,12 @@ void MainWindow::allUpdate(){// check all things needed to be check periodically
     }
     if(!blocksList.isEmpty()){// terrain damage
         for(auto b:blocksList){
-            b->collideHero(mario);
+            b->collideHero(mario);// check terrain damage
+
+            if(!mario->isVisible()){//check if hero alive after every possible damage
+                emit heroDead();
+            }
+
             if(!b->isVisible()){
                 blocksList.removeOne(b);
                 if(b) delete b;
@@ -235,10 +240,10 @@ void MainWindow::allUpdate(){// check all things needed to be check periodically
         }
     }
     if(!unitsList.isEmpty()){// clear dead units
-        for(int u=0;u<unitsList.size();u++){
-            if(!unitsList[u]->isVisible()){
-                if(unitsList[u]) delete unitsList[u];
-                unitsList.removeAt(u);
+        for(auto u:unitsList){
+            if(!u->isVisible()){
+                if(u) delete u;
+                unitsList.removeOne(u);
             }
         }
     }
@@ -260,11 +265,11 @@ void MainWindow::read(const QString &fileName)
     unitsList.clear();
     blocksList.clear();
 
-    ui->mapProgressBar->show();
-    for(int i=0;i<=100;i++){
-        QThread::msleep(10);
-        ui->mapProgressBar->setValue(i);
-    }
+//    ui->mapProgressBar->show();
+//    for(int i=0;i<=100;i++){
+//        QThread::msleep(10);
+//        ui->mapProgressBar->setValue(i);
+//    }
 
     qDebug()<< QDir::currentPath() <<Qt::endl;
     QFile mapfile(fileName);
@@ -307,11 +312,11 @@ void MainWindow::read(const QString &fileName)
 //            blocksList.push_back(b);
 //            backgroundScene->addItem(b);
 //        }
-//        else if(type=="spring"){
-//            auto b = new Spring(x, y);
-//            blocksList.push_back(b);
-//            backgroundScene->addItem(b);
-//        }
+        else if(type=="spring"){
+            auto b = new Spring(x, y);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
         else if(type=="passive trap"){
             auto b = new Trap(x, y, PASSIVE);
             blocksList.push_back(b);
@@ -319,6 +324,11 @@ void MainWindow::read(const QString &fileName)
         }
         else if(type=="active trap"){
             auto b = new Trap(x, y, NOT_TRIGGERED);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
+        else if(type=="heart"){
+            auto b = new Heart(x, y);
             blocksList.push_back(b);
             backgroundScene->addItem(b);
         }
@@ -415,11 +425,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
 //            blocksList.push_back(b);
 //            backgroundScene->addItem(b);
 //        }
-//        else if(ui->comboBox->currentText()=="Spring"){
-//            Spring *b=new Spring(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
-//            blocksList.push_back(b);
-//            backgroundScene->addItem(b);
-//        }
+        else if(ui->comboBox->currentText()=="Spring"){
+            Spring *b=new Spring(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
         else if(ui->comboBox->currentText()=="Passive trap"){
             Trap *b=new Trap(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
             blocksList.push_back(b);
@@ -427,6 +437,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
         }
         else if(ui->comboBox->currentText()=="Active trap"){
             Trap *b=new Trap(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH, NOT_TRIGGERED);
+            blocksList.push_back(b);
+            backgroundScene->addItem(b);
+        }
+        else if(ui->comboBox->currentText()=="Heart"){
+            Heart *b=new Heart(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
             blocksList.push_back(b);
             backgroundScene->addItem(b);
         }

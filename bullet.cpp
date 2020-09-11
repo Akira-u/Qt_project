@@ -1,5 +1,5 @@
 #include "bullet.h"
-
+#include <QDebug>
 Bullet::Bullet(QObject *parent, QPixmap pix): Unit(pix, parent)
 {
 
@@ -8,9 +8,9 @@ void Bullet::move(){
     if(horizontalMoveStatus != STOP){// move
         moveBy(horizontalMoveStatus * horizontalSpeed, 0);
     }
-    if(!isLeftBlocked||isRightBlocked){
+    if(isLeftBlocked||isRightBlocked){
         horizontalMoveStatus = STOP;
-        hide();
+         hide();
     }
 
     // left out = right in

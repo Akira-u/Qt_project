@@ -12,7 +12,7 @@ public:
     QString gameType() override{
         return "spitter";
     }
-    // move: hover
+    void move() override;
     void farAttackHero(Unit *, QGraphicsScene *, QList<Unit *>&);
     void monsterAttackHero(Unit *) override{}
 };

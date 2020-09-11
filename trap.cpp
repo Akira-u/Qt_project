@@ -23,13 +23,17 @@ void Trap::collideHero(Hero *hero){
         return;
     }
     //active trap
-    if(hero->y()>boundingRect().top()&&hero->x()>=boundingRect().left()&&hero->x()<=boundingRect().left()+boundingRect().width()){
-        //when under the trap
+    if(isActive==TRIGGERED){
+        move();
+    }
+    else if(hero->y()>y()&&hero->x()>=x()&&hero->x()<=x()+boundingRect().width()){
+
         isActive = TRIGGERED;
         move();
     }
-    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)){
+    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)){//todo 落地不动?
         hero->beAttacked();
-        isActive = PASSIVE;
+        //isActive = PASSIVE;
     }
+
 }

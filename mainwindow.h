@@ -8,6 +8,8 @@
 #include "licker.h"
 #include "jumper.h"
 #include "spitter.h"
+#include "heart.h"
+#include "spring.h"
 #include <QTimer>
 #include <QWidget>
 #include <QMainWindow>

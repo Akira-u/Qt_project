@@ -18,7 +18,6 @@ public:
     virtual QString gameType(){
         return "block";
     }
-    QString id;
 signals:
 
 private:

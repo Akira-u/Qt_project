@@ -18,12 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     block.cpp \
     bullet.cpp \
+    heart.cpp \
     hero.cpp \
     jumper.cpp \
     licker.cpp \
     main.cpp \
     mainwindow.cpp \
     spitter.cpp \
+    spring.cpp \
     trap.cpp \
     unit.cpp
 
@@ -31,11 +33,13 @@ HEADERS += \
     block.h \
     bullet.h \
     constants.h \
+    heart.h \
     hero.h \
     jumper.h \
     licker.h \
     mainwindow.h \
     spitter.h \
+    spring.h \
     trap.h \
     unit.h
 

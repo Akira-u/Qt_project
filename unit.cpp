@@ -131,6 +131,11 @@ void Unit::checkCollideDirection(){
     if(gameType()=="jumper") qDebug()<<isOnGround<<isRightBlocked;
 }
 
+void Unit::setIsOnGround(bool value)
+{
+    isOnGround = value;
+}
+
 void Unit::monsterAttackHero(Unit * hero){
     if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)&&attackInterval <= 0&&isVisible()){
         hero->beAttacked();
@@ -151,5 +156,18 @@ void Unit::beAttacked(){
     }
     else if(gameType()=="hero"){
         setPos(STARTPOINT_X, STARTPOINT_Y);
+        QMessageBox msgBox;
+        msgBox.setText("Respawn!Remain life:"+QString::number(health));
+        msgBox.exec();
     }
+}
+
+void Unit::setHealth(int value)
+{
+    health = value;
+}
+
+int Unit::getHealth() const
+{
+    return health;
 }
