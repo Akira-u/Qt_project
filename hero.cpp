@@ -6,33 +6,34 @@ Hero::Hero(QObject *parent, QPixmap pix) : Unit(pix, parent){}
 void Hero::move(){
     if(horizontalMoveStatus != STOP){//move
         moveBy(horizontalMoveStatus * horizontalSpeed, 0);
+
     }
 
     if(!isOnGround){//drop
 
         verticalMoveStatus = DOWN;
-        verticalSpeed += G;//up is -, down is +
+        if(verticalSpeed < MAXSPEED) verticalSpeed += G;//up is -, down is +
         moveBy(0, verticalSpeed);
     }
 
     // left out = right in
     if(x()<0){
-        setX(999);
+        setX(VIEW_WIDTH);
     }
-    else if(x()>1000){
+    else if(x()>VIEW_WIDTH){
         setX(1);
     }
     if(y()<0){
         setY(0);
     }
-    else if(y()>1300){
+    else if(y()>VIEW_HEIGHT){
         hide();
     }
 }
 
 
 void Hero::keyPressEvent(QKeyEvent *event){
-    qDebug("keyreceive");
+
     if(event->key() == Qt::Key_D){// hero move right
         if(isRightBlocked){
             setHorizontalMove(STOP);
@@ -50,7 +51,7 @@ void Hero::keyPressEvent(QKeyEvent *event){
     else if(event->key() == Qt::Key_W){
         if(isOnGround){
             jump();
-            qDebug("jump called");
+
             return;
         }
     }

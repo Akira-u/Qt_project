@@ -21,6 +21,7 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QDir>
+#include <QThread>
 
 
 
@@ -48,7 +49,7 @@ protected:
 
 public slots:
     void allUpdate();
-    //void gameOver();//todo implement
+    void gameOver();
 signals:
     void heroDead();
 
@@ -58,7 +59,9 @@ private:
     QGraphicsScene *backgroundScene;
     QList<Unit*> unitsList;
     Hero *mario = nullptr;// the pointer of unique hero
-    //to do: write class Monster inheriting Item and add list of monsters
     QList<Block *>blocksList;
+
+    QTime beginTime;
+    QTime endTime;
 };
 #endif // MAINWINDOW_H

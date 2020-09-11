@@ -3,7 +3,7 @@
 Unit::Unit(QPixmap pix, QObject *parent) : QObject(parent), QGraphicsPixmapItem(pix)
 {
     width=boundingRect().width();
-    height=boundingRect().height();
+    height=boundingRect().height();//todo -4?
 }
 
 int Unit::getHorizontalSpeed() const{
@@ -42,7 +42,8 @@ void Unit::move(){
 
     if(!isOnGround){//drop
         verticalMoveStatus = DOWN;
-        verticalSpeed += G;//up is -, down is +
+
+        if(verticalSpeed < MAXSPEED) verticalSpeed += G;//up is -, down is +
         moveBy(0, verticalSpeed);
     }
     if(!isLeftBlocked&&horizontalMoveStatus==STOP){
@@ -56,22 +57,23 @@ void Unit::move(){
     }
     // left out = right in
     if(x()<0){
-        setX(1860);
+        setX(VIEW_WIDTH);
     }
-    else if(x()>1860){
+    else if(x()>VIEW_WIDTH){
         setX(1);
     }
     if(y()<0){
         setY(0);
     }
-    else if(y()>1060){
+    else if(y()>VIEW_HEIGHT){
         hide();
     }
+
 }
 
 void Unit::checkCollideDirection(){
     //prepareGeometryChange();
-    collideItemsList = collidingItems();
+    collideItemsList = collidingItems(Qt::IntersectsItemBoundingRect);
     if(!collideItemsList.isEmpty()){
 
         bool bottomFlag = 0;// check is not collided
@@ -79,26 +81,27 @@ void Unit::checkCollideDirection(){
         bool leftFlag = 0;
         bool rightFlag = 0;
         for(auto i:collideItemsList){// find Items on the buttom of hero
-            if(i->y() > y()&&(i->y() - y()<=height/2 + i->boundingRect().height()/2+EPS&&i->y() - y()>=height/2 + i->boundingRect().height()/2-EPS)){// ensure up and down collide
-qDebug("enter ground check");
-qDebug()<<isOnGround<<collideItemsList.size();
+//qDebug()<<i->x()<<x()<<i->y()<<y()+height<<height;
+            if(i->y() > y()&&i->x()<x()+width&&i->x()>x()-i->boundingRect().width()/*&&(i->y() - y()<=height/2 + i->boundingRect().height()/2+EPS&&i->y() - y()>=height/2 + i->boundingRect().height()/2-EPS)*/){// ensure up and down collide
+                if(y() + height>= i->y()&&y()+height<i->y()+EPS){// avoid digging in ground
+                    setY(i->y() - height + 1);
+            //qDebug()<<i->y()<<i->boundingRect().center()<<y()<<height<<collidesWithItem(i,Qt::IntersectsItemBoundingRect);
+                }
+
                 setVerticalSpeed(0);// reset vv
                 setVerticalMoveStatus(STOP);
                 isOnGround = true;
                 bottomFlag = true;
-                if(y() > i->y() - height/2 - i->boundingRect().height()/2){// avoid digging in ground
-                    setY(i->y() - height/2 - i->boundingRect().height()/2);
-
-                }
             }
-            else if(i->x() > x()&&(i->x() - x()<=width/2 + i->boundingRect().width()/2+EPS&&i->x() - x()>=width/2 + i->boundingRect().width()/2-EPS)){
-                isRightBlocked = true;
-                rightFlag = true;
+            else if(i->x() > x()&&i->y()<y()+height - 1&&i->y()+i->boundingRect().height()>y()){
+               isRightBlocked = true;
+               rightFlag = true;
             }
-            else if(i->x() < x()&&(x() - i->x()<=width/2 + i->boundingRect().width()/2+EPS&&x() - i->x()>=width/2 + i->boundingRect().width()/2-EPS)){
+            else if(i->x() < x()&&i->y()<y()+height - 1&&i->y()+i->boundingRect().height()>y()/*&&(x() - i->x()<=width/2 + i->boundingRect().width()/2+EPS&&x() - i->x()>=width/2 + i->boundingRect().width()/2-EPS)*/){
                 isLeftBlocked = true;
                 leftFlag = true;
             }
+
             else if(i->y() < y()&&(y() - i->y()<=height/2 + i->boundingRect().height()/2+EPS&&y() - i->y()>=height/2 + i->boundingRect().height()/2-EPS)){
                 isFloorBlocked = true;
                 floorFlag = true;
@@ -106,7 +109,6 @@ qDebug()<<isOnGround<<collideItemsList.size();
 
         }
         if(bottomFlag == false){
-            qDebug("bottomflag");
             isOnGround = false;
         }
         if(floorFlag == false){
@@ -126,11 +128,11 @@ qDebug()<<isOnGround<<collideItemsList.size();
         isRightBlocked = false;
         isLeftBlocked = false;
     }
-
+    if(gameType()=="jumper") qDebug()<<isOnGround<<isRightBlocked;
 }
 
 void Unit::monsterAttackHero(Unit * hero){
-    if(collidesWithItem(hero)&&attackInterval <= 0&&isVisible()){
+    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)&&attackInterval <= 0&&isVisible()){
         hero->beAttacked();
         attackInterval = 1000 / TIMER_INTERVAL;
     }
@@ -139,6 +141,7 @@ void Unit::monsterAttackHero(Unit * hero){
 
 void Unit::jump(){
     setVerticalSpeed(JUMPSPEED);
+    moveBy(0, -1);
     isOnGround = false;
 }
 void Unit::beAttacked(){

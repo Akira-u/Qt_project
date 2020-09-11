@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //test
     if(mario==nullptr){
-    mario=new Hero(this);
+    mario=new Hero();
     unitsList.push_front(mario);
     backgroundScene->addItem(mario);
     mario->setPos(STARTPOINT_X,STARTPOINT_Y);// init start location
@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
             ui->map2Button_2->show();
         }});
     connect(ui->backToMenuButton, &QPushButton::clicked, [=](){this->switchGameStatus(STARTMODE);});
-    //connect(this, SIGNAL(heroDead()), this, SLOT(gameOver())); todo: implement gameover
+    connect(this, SIGNAL(heroDead()), this, SLOT(gameOver()));
 }
 
 MainWindow::~MainWindow(){
@@ -90,6 +90,15 @@ MainWindow::~MainWindow(){
     }
 }
 
+void MainWindow::gameOver(){
+    endTime = QTime::currentTime();
+    globalTimer->stop();
+    QString playTime = QString::number(beginTime.secsTo(endTime));
+    QMessageBox msgBox;
+    msgBox.setText("Time:"+playTime);
+    msgBox.exec();
+    switchGameStatus(STARTMODE);
+}
 void MainWindow::switchGameStatus(int gameStatus){
 
     if(gameStatus==STARTMODE){
@@ -113,7 +122,7 @@ void MainWindow::switchGameStatus(int gameStatus){
 
     }
     if(gameStatus==MAPSELECT){//select maps, meanwhile, play or edit is recorded
-        //if(playOrEdit==PLAYMODE){
+
 
             ui->startButton->hide();
             ui->enterEditModeButton->hide();
@@ -164,7 +173,7 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->backToMenuButton->show();
 
         globalTimer->start();
-
+        beginTime = QTime::currentTime();
 
 
     }
@@ -242,12 +251,21 @@ void MainWindow::read(const QString &fileName)
 {
     for(auto u:unitsList){
 
-        if(u!=nullptr&&u->gameType()!="hero") delete u;
+        if(u!=nullptr/*&&u->gameType()!="hero"*/) delete u;
     }
 
     for(auto b:blocksList){
         if(b!=nullptr) delete b;
     }
+    unitsList.clear();
+    blocksList.clear();
+
+    ui->mapProgressBar->show();
+    for(int i=0;i<=100;i++){
+        QThread::msleep(10);
+        ui->mapProgressBar->setValue(i);
+    }
+
     qDebug()<< QDir::currentPath() <<Qt::endl;
     QFile mapfile(fileName);
     if(!mapfile.exists()){
@@ -325,14 +343,17 @@ void MainWindow::read(const QString &fileName)
         }
 
         else if (type=="hero"){
-            if(unitsList.first()->gameType()=="hero"){
+            if(!unitsList.isEmpty()&&unitsList.first()->gameType()=="hero"){
                 qDebug("read multiple hero!");
                 continue;//only one hero
             }
-            auto h = new Hero(this);
+            auto h = new Hero();
             h->setPos(x,y);
+            mario = h;
             unitsList.push_front(h);
             backgroundScene->addItem(h);
+            h->grabKeyboard();
+            h->grabMouse();
         }
 
     }
@@ -426,6 +447,20 @@ void MainWindow::mousePressEvent(QMouseEvent *event){
             u->setPos(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
             unitsList.push_back(u);
             backgroundScene->addItem(u);
+        }
+        else if (ui->comboBox->currentText()=="Hero"){
+
+            auto h = new Hero();
+            h->setPos(event->x()/BLOCK_LENGTH*BLOCK_LENGTH, event->y()/BLOCK_LENGTH*BLOCK_LENGTH);
+            mario = h;
+            if(!unitsList.isEmpty()&&unitsList.first()->gameType()=="hero"){
+                *unitsList.begin() = h;
+            }
+            else
+                unitsList.push_front(h);
+            backgroundScene->addItem(h);
+//            h->grabKeyboard();
+//            h->grabMouse();
         }
         //todo flower and mush
         repaint();

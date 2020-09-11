@@ -17,24 +17,25 @@ void Jumper::move(){
     }
     if(!isOnGround){//drop
         verticalMoveStatus = DOWN;
-        verticalSpeed += G;//up is -, down is +
+        if(verticalSpeed < MAXSPEED) verticalSpeed += G;//up is -, down is +
         moveBy(0, verticalSpeed);
     }
     else{
         jump();
+        qDebug("jumperjump");
 
     }
     // left out = right in
     if(x()<0){
-        setX(999);
+        setX(VIEW_WIDTH);
     }
-    else if(x()>1000){
+    else if(x()>VIEW_WIDTH){
         setX(1);
     }
     if(y()<0){
         setY(0);
     }
-    else if(y()>1300){
+    else if(y()>VIEW_HEIGHT){
         hide();
     }
 

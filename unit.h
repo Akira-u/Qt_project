@@ -35,14 +35,16 @@ public:
     // Members about collide
 //    QRectF boundingRect() const override;
     QList<QGraphicsItem*> collideItemsList;
+    //bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const override;
     void checkCollideDirection();//set members below
-    bool isFloorBlocked;
-    bool isOnGround;// true when unit is on the ground which means it can jump.
-    bool isRightBlocked;
-    bool isLeftBlocked;
+    bool isFloorBlocked = false;
+    bool isOnGround = false;// true when unit is on the ground which means it can jump.
+    bool isRightBlocked = false;
+    bool isLeftBlocked = false;
     int width;
     int height;
     virtual void monsterAttackHero(Unit *);
+
 
     //functions about health
 
@@ -53,6 +55,7 @@ protected:
     double verticalSpeed = 0;// free fall, need to be set
     int verticalMoveStatus = STOP;
     int attackInterval = 1000 / TIMER_INTERVAL;
+
 signals:
 
 private:
