@@ -11,6 +11,12 @@ Hero::~Hero(){
     delete jump_music;
 }
 void Hero::move(){
+    if(isRightBlocked&&horizontalMoveStatus==RIGHT){
+        horizontalMoveStatus = STOP;
+    }
+//    if(isRightBlocked&&horizontalMoveStatus==RIGHT){
+//        horizontalMoveStatus = STOP;
+//    }
     if(horizontalMoveStatus != STOP){//move
         moveBy(horizontalMoveStatus * horizontalSpeed, 0);
 

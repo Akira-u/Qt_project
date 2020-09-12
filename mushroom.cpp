@@ -5,7 +5,7 @@ Mushroom::Mushroom(int x, int y, QObject *parent, QPixmap img):Block(x, y, img, 
 }
 
 void Mushroom::collideHero(Unit *u){
-    if(collidesWithItem(u)){
+    if(collidesWithItem(u, Qt::IntersectsItemBoundingRect)){
         Hero *hero=dynamic_cast<Hero*>(u);
         if(hero!=nullptr){
             hero->setIsBuffed(true);

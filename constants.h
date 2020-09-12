@@ -16,7 +16,7 @@ const int TIMER_INTERVAL=20;
 const int PAUSE_TIME = 50;
 
 const int BLOCK_LENGTH = 50;
-const int EPS = 10;
+const int EPS = 13;
 
 const int STARTMODE = 0;
 const int MAPSELECT = 1;

@@ -81,23 +81,23 @@ void Unit::checkCollideDirection(){
         bool leftFlag = 0;
         bool rightFlag = 0;
         for(auto i:collideItemsList){// find Items on the buttom of hero
-
-            if(i->y() > y()&&i->x()<x()+width&&i->x()>x()-i->boundingRect().width()/*&&(i->y() - y()<=height/2 + i->boundingRect().height()/2+EPS&&i->y() - y()>=height/2 + i->boundingRect().height()/2-EPS)*/){// ensure up and down collide
+            if(gameType()=="hero"&&i->y()==900) qDebug()<<i->y() - y()<<y() + height<<i->y() + EPS;
+            if(i->y() > y()&&y() + height<i->y() + EPS&&i->x()<x()+width&&i->x()>x()-i->boundingRect().width()){// ensure up and down collide
                 if(y() + height>= i->y()&&y()+height<i->y()+EPS){// avoid digging in ground
                     setY(i->y() - height + 1);
-
                 }
-
                 setVerticalSpeed(0);// reset vv
                 setVerticalMoveStatus(STOP);
                 isOnGround = true;
                 bottomFlag = true;
             }
-            else if(i->x() > x()&&i->y()<y()+height - 1&&i->y()+i->boundingRect().height()>y()){
-               isRightBlocked = true;
-               rightFlag = true;
+
+            else if(i->x() > x()&&i->y()<y() + height - 1&&i->y() + i->boundingRect().height()>y()){
+               if(gameType()=="hero") qDebug("in");
+                isRightBlocked = true;
+                rightFlag = true;
             }
-            else if(i->x() < x()&&i->y()<y()+height - 1&&i->y()+i->boundingRect().height()>y()/*&&(x() - i->x()<=width/2 + i->boundingRect().width()/2+EPS&&x() - i->x()>=width/2 + i->boundingRect().width()/2-EPS)*/){
+            else if(i->x() < x()&&i->y()<y() + height - 1&&i->y() + i->boundingRect().height()>y()/*&&(x() - i->x()<=width/2 + i->boundingRect().width()/2+EPS&&x() - i->x()>=width/2 + i->boundingRect().width()/2-EPS)*/){
                 isLeftBlocked = true;
                 leftFlag = true;
             }
@@ -120,7 +120,7 @@ void Unit::checkCollideDirection(){
         if(leftFlag == false){
             isLeftBlocked = false;
         }
-
+    if(gameType()=="hero") qDebug()<<isRightBlocked<<isLeftBlocked<<isFloorBlocked;
     }
     else{
         isOnGround = false;
