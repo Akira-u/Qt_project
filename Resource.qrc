@@ -16,5 +16,6 @@
         <file>pics/fireball.png</file>
         <file>pics/mario_attack.png</file>
         <file>pics/destination.png</file>
+        <file>pics/icon.png</file>
     </qresource>
 </RCC>
