@@ -151,14 +151,9 @@ void Unit::jump(){
 }
 void Unit::beAttacked(){
     health --;
+    if(gameType()=="licker") qDebug()<<health;
     if(health < 1){
         hide();//todo respawn
-    }
-    else if(gameType()=="hero"){
-        setPos(STARTPOINT_X, STARTPOINT_Y);
-        QMessageBox msgBox;
-        msgBox.setText("Respawn!Remain life:"+QString::number(health));
-        msgBox.exec();
     }
 }
 

@@ -14,5 +14,7 @@
         <file>pics/heart.png</file>
         <file>pics/mushroom.png</file>
         <file>pics/fireball.png</file>
+        <file>pics/mario_attack.png</file>
+        <file>pics/destination.png</file>
     </qresource>
 </RCC>

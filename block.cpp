@@ -15,6 +15,6 @@ void Block::move(){
     return;
 }
 
-void Block::collideHero(Hero *hero){
+void Block::collideHero(Unit *hero){
     return;
 }

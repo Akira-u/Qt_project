@@ -9,6 +9,7 @@ Spitter::Spitter(QObject *parent, QPixmap pix): Unit(pix, parent)
 void Spitter::farAttackHero(Unit *hero, QGraphicsScene *scene, QList<Unit *> &unitsList){
 
     if(isVisible()&&attackInterval==0&&hero->y()<y()+boundingRect().height()&&hero->y()>y()-hero->boundingRect().height()){
+
         auto *bu = new Bullet(scene);
 
         if(hero->x()>x()){//s h

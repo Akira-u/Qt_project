@@ -5,7 +5,7 @@ Spring::Spring(int x, int y, QPixmap img, QObject *parent):Block(x, y, img, pare
 
 }
 
-void Spring::collideHero(Hero *hero){
+void Spring::collideHero(Unit *hero){
     if(collidesWithItem(hero)&&hero->y()<y()){
         hero->setVerticalSpeed(2 * JUMPSPEED);
         hero->setVerticalMoveStatus(DOWN);

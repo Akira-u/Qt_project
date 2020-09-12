@@ -2,7 +2,7 @@
 #define BLOCK_H
 
 #include "constants.h"
-#include "hero.h"
+#include "unit.h"
 #include <QObject>
 #include <QGraphicsItem>
 #include <QPoint>
@@ -14,7 +14,7 @@ public:
     explicit Block(int x, int y, QPixmap img=QPixmap(":/pics/ground.png"), QObject *parent = nullptr);
 //    QRectF boundingRect() const override;
     virtual void move();
-    virtual void collideHero(Hero*);
+    virtual void collideHero(Unit *);
     virtual QString gameType(){
         return "block";
     }

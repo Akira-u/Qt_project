@@ -14,7 +14,7 @@ public:
     explicit Trap(int x, int y,int activeType = -1, QObject *parent = nullptr, QPixmap img=QPixmap(":/pics/firestart.png"));
     void nextFrame();
     void move() override;
-    void collideHero(Hero*) override;
+    void collideHero(Unit*) override;
     QString gameType() override{
         if(isActive==PASSIVE) return "passive trap";
         else return "active trap";

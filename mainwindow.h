@@ -10,6 +10,9 @@
 #include "spitter.h"
 #include "heart.h"
 #include "spring.h"
+#include "breakableblock.h"
+#include "mushroom.h"
+#include "destination.h"
 #include <QTimer>
 #include <QWidget>
 #include <QMainWindow>

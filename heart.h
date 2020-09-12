@@ -8,7 +8,7 @@ class Heart : public Block
 public:
     Heart(int x, int y, QPixmap img=QPixmap(":/pics/heart.png"), QObject *parent = nullptr);
     // use Block::move, can't move
-    void collideHero(Hero *) override;
+    void collideHero(Unit *) override;
     QString gameType() override{
         return "heart";
     }

@@ -1,6 +1,9 @@
 #include "hero.h"
 #include<QDebug>
-Hero::Hero(QObject *parent, QPixmap pix) : Unit(pix, parent){}
+Hero::Hero(QObject *parent, QPixmap pix) : Unit(pix, parent){
+    attackInterval = 0;
+
+}
 
 
 void Hero::move(){
@@ -67,4 +70,63 @@ void Hero::keyReleaseEvent(QKeyEvent *event){
     else{
         QGraphicsPixmapItem::keyReleaseEvent(event);
     }
+}
+
+void Hero::setIsBuffed(bool value)
+{
+    isBuffed = value;
+}
+
+void Hero::beAttacked(){
+    if(attackInterval==1){
+        return;
+    }
+    health --;
+    isBuffed = false;
+    if(health < 1){
+        hide();
+    }
+    else{// respawn
+        setPos(STARTPOINT_X, STARTPOINT_Y);
+        QMessageBox msgBox;
+        msgBox.setText("Respawn!Remain life:"+QString::number(health));
+        msgBox.exec();
+    }
+}
+void Hero::attack(){
+    for(auto i:collideItemsList){
+        if(i==this) continue;
+        Unit *u=dynamic_cast<Unit*>(i);
+        if(u!=nullptr){
+            score++;
+            u->beAttacked();
+            continue;
+        }
+        Block *b=dynamic_cast<Block *>(i);
+        if(b!=nullptr){
+             if(b->gameType()=="breakable brick"){
+                 b->hide();
+                 qDebug("hit");
+             }
+        }
+    }
+}
+void Hero::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    if(event->button()==Qt::LeftButton){
+        if(attackInterval==0){
+            attack();
+            attackInterval = 1;
+            setPixmap(QPixmap(":/pics/mario_attack.png"));
+            QTimer::singleShot(500, this, [=](){
+                attackInterval = 0;
+                setPixmap(QPixmap(":/pics/mario_stop.png"));
+            });
+
+        }
+    }
+}
+
+bool Hero::getIsBuffed() const
+{
+    return isBuffed;
 }

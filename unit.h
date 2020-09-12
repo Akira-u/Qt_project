@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QMessageBox>
+#include <QTimer>
 
 
 class Unit : public QObject, public QGraphicsPixmapItem
@@ -49,7 +50,7 @@ public:
 
     //functions about health
 
-    void beAttacked();
+    virtual void beAttacked();
     void setHealth(int value);
 
     int getHealth() const;
@@ -61,12 +62,12 @@ protected:
     int horizontalMoveStatus = STOP;// move during A/D is pressed
     double verticalSpeed = 0;// free fall, need to be set
     int verticalMoveStatus = STOP;
-    int attackInterval = 1000 / TIMER_INTERVAL;
-
+    int attackInterval = 1000/TIMER_INTERVAL;// for hero: can't be hurt during interval
+    int health = 1;
 signals:
 
 private:
-    int health = 1;
+
 
 };
 

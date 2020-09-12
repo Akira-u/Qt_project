@@ -53,8 +53,8 @@
      <rect>
       <x>1870</x>
       <y>140</y>
-      <width>191</width>
-      <height>71</height>
+      <width>211</width>
+      <height>81</height>
      </rect>
     </property>
     <item>
@@ -69,6 +69,15 @@
      <property name="icon">
       <iconset resource="Resource.qrc">
        <normaloff>:/pics/mario_stop.png</normaloff>:/pics/mario_stop.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Destination</string>
+     </property>
+     <property name="icon">
+      <iconset resource="Resource.qrc">
+       <normaloff>:/pics/destination.png</normaloff>:/pics/destination.png</iconset>
      </property>
     </item>
     <item>
