@@ -3,6 +3,7 @@
 #include "unit.h"
 #include "block.h"
 #include <QObject>
+#include <QMediaPlayer>
 
 
 class Hero : public Unit
@@ -10,6 +11,7 @@ class Hero : public Unit
     Q_OBJECT
 public:
     explicit Hero(QObject *parent = nullptr, QPixmap pix = QPixmap(":/pics/mario_stop.png"));
+    ~Hero();
     QString gameType() override{
         return "hero";
     }
@@ -29,7 +31,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 private:
     bool isBuffed = false;
-
+    QMediaPlayer *jump_music;
 signals:
 
 };

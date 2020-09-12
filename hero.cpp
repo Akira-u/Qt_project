@@ -2,10 +2,14 @@
 #include<QDebug>
 Hero::Hero(QObject *parent, QPixmap pix) : Unit(pix, parent){
     attackInterval = 0;
-
+    jump_music = new QMediaPlayer;
+    jump_music->setMedia(QUrl("qrc:/mu/mp3s/jumpSound.mp3"));
+    jump_music->setVolume(50);
 }
 
-
+Hero::~Hero(){
+    delete jump_music;
+}
 void Hero::move(){
     if(horizontalMoveStatus != STOP){//move
         moveBy(horizontalMoveStatus * horizontalSpeed, 0);
@@ -54,7 +58,7 @@ void Hero::keyPressEvent(QKeyEvent *event){
     else if(event->key() == Qt::Key_W){
         if(isOnGround){
             jump();
-
+            jump_music->play();
             return;
         }
     }

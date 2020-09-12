@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/mu">
+        <file>mp3s/jumpSound.mp3</file>
+    </qresource>
+</RCC>
