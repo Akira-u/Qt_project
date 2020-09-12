@@ -91,6 +91,7 @@ void Hero::beAttacked(){
         hide();
     }
     else{// respawn
+        setHorizontalMove(STOP);
         setPos(STARTPOINT_X, STARTPOINT_Y);
         QMessageBox msgBox;
         msgBox.setText("Respawn!Remain life:"+QString::number(health));
@@ -110,7 +111,6 @@ void Hero::attack(){
         if(b!=nullptr){
              if(b->gameType()=="breakable brick"){
                  b->hide();
-                 qDebug("hit");
              }
         }
     }

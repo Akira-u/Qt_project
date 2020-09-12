@@ -31,9 +31,8 @@ void Trap::collideHero(Unit *hero){
         isActive = TRIGGERED;
         move();
     }
-    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)){//todo 落地不动?
+    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)){
         hero->beAttacked();
-        //isActive = PASSIVE;
     }
 
 }

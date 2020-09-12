@@ -147,7 +147,7 @@ void MainWindow::switchGameStatus(int gameStatus){
         ui->map1Button_2->hide();
         ui->map2Button_2->hide();
         ui->backgroundView->show();
-        ui->backToMenuButton->show();//todo:确认会不会造成异常（由于结束game）
+        ui->backToMenuButton->show();
 
         ui->comboBox->setCurrentText("Null");
         ui->comboBox->hide();
@@ -190,21 +190,20 @@ void MainWindow::switchGameStatus(int gameStatus){
 }
 void MainWindow::checkObjsMove(){
     for(auto u:unitsList){
-        u->move();
+        if(u!=nullptr) u->move();
     }
-    //to do: add check of monsters attack
 }
 void MainWindow::checkObjsCollide(){
-    for(auto u:unitsList){
-        if(u!=nullptr){
-            if(u->gameType()!="spitter"){
-                u->monsterAttackHero(mario);
+    for(int u = 0; u < unitsList.size(); u++){
+        if(unitsList[u]!=nullptr){
+            if(unitsList[u]->gameType()!="spitter"){
+                unitsList[u]->monsterAttackHero(mario);
             }
             else{
-                Spitter *s=static_cast<Spitter *>(u);
+                Spitter *s=static_cast<Spitter *>(unitsList[u]);
                 s->farAttackHero(mario, backgroundScene, unitsList);
             }
-            u->checkCollideDirection();
+            unitsList[u]->checkCollideDirection();
         }
     }
 }
@@ -218,31 +217,25 @@ void MainWindow::allUpdate(){// check all things needed to be check periodically
         return;
     }
     if(!blocksList.isEmpty()){// terrain damage
-        for(auto b:blocksList){
-            b->collideHero(mario);// check terrain damage
+        for(auto b = 0; b < blocksList.size(); b++){
+            blocksList[b]->collideHero(mario);// check terrain damage
 
             if(!mario->isVisible()){//check if hero alive after every possible damage
                 emit heroDead();
                 return;
             }
 
-            if(!b->isVisible()){
-                blocksList.removeOne(b);
-                if(b) {
-                    delete b;
-                }
+            if(!blocksList[b]->isVisible()){
+                delete blocksList[b];
+                blocksList.removeAt(b);
             }
         }
     }
     if(!unitsList.isEmpty()){// clear dead units
-        for(auto u:unitsList){
-            if(!u->isVisible()){
-                unitsList.removeOne(u);//?
-                if(u) {
-                    delete u;
-                    //u=nullptr;
-                }
-
+        for(int u = 0; u < unitsList.size(); u++){
+            if(!unitsList[u]->isVisible()){
+                delete unitsList[u];
+                unitsList.removeAt(u);
             }
         }
     }
@@ -255,7 +248,7 @@ void MainWindow::read(const QString &fileName)
 {
     for(auto u:unitsList){
 
-        if(u!=nullptr/*&&u->gameType()!="hero"*/) delete u;
+        if(u!=nullptr) delete u;
     }
 
     for(auto b:blocksList){
@@ -264,11 +257,11 @@ void MainWindow::read(const QString &fileName)
     unitsList.clear();
     blocksList.clear();
 
-//    ui->mapProgressBar->show();
-//    for(int i=0;i<=100;i++){
-//        QThread::msleep(10);
-//        ui->mapProgressBar->setValue(i);
-//    }
+    ui->mapProgressBar->show();
+    for(int i=0;i<=100;i++){
+        QThread::msleep(10);
+        ui->mapProgressBar->setValue(i);
+    }
 
     qDebug()<< QDir::currentPath() <<Qt::endl;
     QFile mapfile(fileName);
@@ -405,7 +398,7 @@ void MainWindow::write(const QString &fileName)
     if(!mapfile.open(QIODevice::WriteOnly)){
         qDebug()<<"file write error"<<Qt::endl;
     }
-    mapfile.write(ba);//todo clear?
+    mapfile.write(ba);
     mapfile.close();
     QMessageBox msgBox;
     msgBox.setText("The Map has been save successfully!");

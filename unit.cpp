@@ -81,11 +81,11 @@ void Unit::checkCollideDirection(){
         bool leftFlag = 0;
         bool rightFlag = 0;
         for(auto i:collideItemsList){// find Items on the buttom of hero
-//qDebug()<<i->x()<<x()<<i->y()<<y()+height<<height;
+
             if(i->y() > y()&&i->x()<x()+width&&i->x()>x()-i->boundingRect().width()/*&&(i->y() - y()<=height/2 + i->boundingRect().height()/2+EPS&&i->y() - y()>=height/2 + i->boundingRect().height()/2-EPS)*/){// ensure up and down collide
                 if(y() + height>= i->y()&&y()+height<i->y()+EPS){// avoid digging in ground
                     setY(i->y() - height + 1);
-            //qDebug()<<i->y()<<i->boundingRect().center()<<y()<<height<<collidesWithItem(i,Qt::IntersectsItemBoundingRect);
+
                 }
 
                 setVerticalSpeed(0);// reset vv
@@ -128,7 +128,7 @@ void Unit::checkCollideDirection(){
         isRightBlocked = false;
         isLeftBlocked = false;
     }
-    if(gameType()=="jumper") qDebug()<<isOnGround<<isRightBlocked;
+
 }
 
 void Unit::setIsOnGround(bool value)
@@ -151,9 +151,8 @@ void Unit::jump(){
 }
 void Unit::beAttacked(){
     health --;
-    if(gameType()=="licker") qDebug()<<health;
     if(health < 1){
-        hide();//todo respawn
+        hide();
     }
 }
 

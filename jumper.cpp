@@ -22,7 +22,6 @@ void Jumper::move(){
     }
     else{
         jump();
-        qDebug("jumperjump");
 
     }
     // left out = right in
