@@ -18,7 +18,7 @@ void Trap::move(){
 //}
 
 void Trap::collideHero(Unit *hero){
-    if(isActive==PASSIVE&&collidesWithItem(hero, Qt::IntersectsItemBoundingRect)){// passive trap
+    if(isActive==PASSIVE&&hero->collideItemsList.contains(this)){// passive trap
         hero->beAttacked();
         return;
     }
@@ -31,7 +31,7 @@ void Trap::collideHero(Unit *hero){
         isActive = TRIGGERED;
         move();
     }
-    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)){
+    if(hero->collideItemsList.contains(this)){
         hero->beAttacked();
     }
 

@@ -15,7 +15,11 @@ public:
     QString gameType() override{
         return "hero";
     }
+    void playJumpMusic(){
+        jump_music->play();
+    }
     void move() override;
+    void jump() override;
     void monsterAttackHero(Unit *) override{}
     void attack();//todo:implement
     void setIsBuffed(bool value);

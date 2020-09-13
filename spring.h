@@ -1,6 +1,7 @@
 #ifndef SPRING_H
 #define SPRING_H
 #include "block.h"
+#include "hero.h"
 
 class Spring : public Block
 {

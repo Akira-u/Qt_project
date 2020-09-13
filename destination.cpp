@@ -6,7 +6,7 @@ Destination::Destination(int x, int y, QPixmap img, QObject *parent):Block(x, y,
 }
 
 void Destination::collideHero(Unit *hero){
-    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)&&touchDest==false){
+    if(hero->collideItemsList.contains(this)&&touchDest==false){
         touchDest = true;
         QMessageBox msgBox;
         msgBox.setText("You win!");

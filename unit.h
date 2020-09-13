@@ -27,7 +27,7 @@ public:
 
     double getVerticalSpeed() const;
     void setVerticalSpeed(double value);
-    void jump();
+    virtual void jump();
 
     int getVerticalMoveStatus() const;
     void setVerticalMoveStatus(int dir);
@@ -35,9 +35,7 @@ public:
     virtual void move();
 
     // Members about collide
-//    QRectF boundingRect() const override;
     QList<QGraphicsItem*> collideItemsList;
-    //bool collidesWithItem(const QGraphicsItem *other, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape) const override;
     void checkCollideDirection();//set members below
     bool isFloorBlocked = false;
     bool isOnGround = false;// true when unit is on the ground which means it can jump.

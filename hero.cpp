@@ -14,9 +14,9 @@ void Hero::move(){
     if(isRightBlocked&&horizontalMoveStatus==RIGHT){
         horizontalMoveStatus = STOP;
     }
-//    if(isRightBlocked&&horizontalMoveStatus==RIGHT){
-//        horizontalMoveStatus = STOP;
-//    }
+    if(isLeftBlocked&&horizontalMoveStatus==LEFT){
+        horizontalMoveStatus = STOP;
+    }
     if(horizontalMoveStatus != STOP){//move
         moveBy(horizontalMoveStatus * horizontalSpeed, 0);
 
@@ -44,7 +44,12 @@ void Hero::move(){
     }
 }
 
-
+void Hero::jump(){
+    setVerticalSpeed(JUMPSPEED);
+    moveBy(0, -1);
+    isOnGround = false;
+    jump_music->play();
+}
 void Hero::keyPressEvent(QKeyEvent *event){
 
     if(event->key() == Qt::Key_D){// hero move right
@@ -64,7 +69,7 @@ void Hero::keyPressEvent(QKeyEvent *event){
     else if(event->key() == Qt::Key_W){
         if(isOnGround){
             jump();
-            jump_music->play();
+
             return;
         }
     }

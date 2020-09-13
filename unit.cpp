@@ -72,7 +72,6 @@ void Unit::move(){
 }
 
 void Unit::checkCollideDirection(){
-    //prepareGeometryChange();
     collideItemsList = collidingItems(Qt::IntersectsItemBoundingRect);
     if(!collideItemsList.isEmpty()){
 
@@ -81,7 +80,6 @@ void Unit::checkCollideDirection(){
         bool leftFlag = 0;
         bool rightFlag = 0;
         for(auto i:collideItemsList){// find Items on the buttom of hero
-            if(gameType()=="hero"&&i->y()==900) qDebug()<<i->y() - y()<<y() + height<<i->y() + EPS;
             if(i->y() > y()&&y() + height<i->y() + EPS&&i->x()<x()+width&&i->x()>x()-i->boundingRect().width()){// ensure up and down collide
                 if(y() + height>= i->y()&&y()+height<i->y()+EPS){// avoid digging in ground
                     setY(i->y() - height + 1);
@@ -93,11 +91,11 @@ void Unit::checkCollideDirection(){
             }
 
             else if(i->x() > x()&&i->y()<y() + height - 1&&i->y() + i->boundingRect().height()>y()){
-               if(gameType()=="hero") qDebug("in");
+
                 isRightBlocked = true;
                 rightFlag = true;
             }
-            else if(i->x() < x()&&i->y()<y() + height - 1&&i->y() + i->boundingRect().height()>y()/*&&(x() - i->x()<=width/2 + i->boundingRect().width()/2+EPS&&x() - i->x()>=width/2 + i->boundingRect().width()/2-EPS)*/){
+            else if(i->x() < x()&&i->y()<y() + height - 1&&i->y() + i->boundingRect().height()>y()){
                 isLeftBlocked = true;
                 leftFlag = true;
             }
@@ -120,7 +118,6 @@ void Unit::checkCollideDirection(){
         if(leftFlag == false){
             isLeftBlocked = false;
         }
-    if(gameType()=="hero") qDebug()<<isRightBlocked<<isLeftBlocked<<isFloorBlocked;
     }
     else{
         isOnGround = false;
@@ -137,7 +134,7 @@ void Unit::setIsOnGround(bool value)
 }
 
 void Unit::monsterAttackHero(Unit * hero){
-    if(collidesWithItem(hero, Qt::IntersectsItemBoundingRect)&&attackInterval <= 0&&isVisible()){
+    if(hero->collideItemsList.contains(this)&&attackInterval <= 0&&isVisible()){
         hero->beAttacked();
         attackInterval = 1000 / TIMER_INTERVAL;
     }
